@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Button, Result } from "antd";
+import WelcomePage from "./View/Layout/WelcomePage/WelcomePage";
+import HomePage from "./View/Layout/HomePage/HomePage";
+import CartPage from "./View/Layout/CartPage/CartPage";
+import BillPage from "./View/Layout/BillPage/BillPage";
+import MenuPage from "./View/Layout/MenuPage/MenuPage";
 
 function App() {
+  const navigate = useNavigate();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/bill" element={<BillPage />} />
+        <Route
+          path="*"
+          element={
+            <Result
+              status="404"
+              title="404"
+              subTitle="Sorry, the page you visited does not exist."
+              extra={
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Back Home
+                </Button>
+              }
+            />
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
