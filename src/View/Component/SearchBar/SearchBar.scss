@@ -1,0 +1,43 @@
+@import "../../../Utils/variables";
+
+.customer-search-bar-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    width: 80%;
+    padding: 14px 20px;
+    border-radius: 16px;
+    column-gap: 6px;
+}
+
+.search-bar-input{
+    border: none;
+    width: calc(100% - 16px);
+}
+
+.search-bar-input:focus{
+    outline: none;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    $inactive;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    $inactive;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #909;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    $inactive;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color:    $inactive;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+    color:    $inactive;
+}

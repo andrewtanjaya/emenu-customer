@@ -1,0 +1,47 @@
+.customer-navbar-container {
+  padding: 40px 24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F9F9F9;
+  box-sizing: border-box;
+}
+
+.customer-navbar-restaurant-logo img {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 20px;
+}
+
+.customer-navbar-exit {
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 10.4px rgba(0, 0, 0, 0.045), 0px 0px 28.8px rgba(0, 0, 0, 0.065), 0px 0px 69.3px rgba(0, 0, 0, 0.085), 0px 0px 230px rgba(0, 0, 0, 0.13);
+}
+
+.customer-navbar-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.customer-navbar-information p {
+  margin: 0px;
+  padding: 0px;
+}
+.customer-navbar-information p:nth-child(1) {
+  color: #CACACA;
+  font-weight: 600;
+}
+.customer-navbar-information p:nth-child(2) {
+  color: black;
+  font-weight: 600;
+}/*# sourceMappingURL=Navbar.css.map */
