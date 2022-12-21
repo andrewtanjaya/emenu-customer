@@ -6,6 +6,7 @@ import HomePage from "./View/Layout/HomePage/HomePage";
 import CartPage from "./View/Layout/CartPage/CartPage";
 import BillPage from "./View/Layout/BillPage/BillPage";
 import MenuPage from "./View/Layout/MenuPage/MenuPage";
+import Auth from "./Utils/Auth";
 
 function App() {
   const navigate = useNavigate();
@@ -13,10 +14,38 @@ function App() {
     <>
       <Routes>
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/bill" element={<BillPage />} />
+        <Route
+          path="/home"
+          element={
+            <Auth>
+              <HomePage />
+            </Auth>
+          }
+        />
+        <Route
+          path="/menu"
+          element={
+            <Auth>
+              <MenuPage />
+            </Auth>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <Auth>
+              <CartPage />
+            </Auth>
+          }
+        />
+        <Route
+          path="/view-bill"
+          element={
+            <Auth>
+              <BillPage />
+            </Auth>
+          }
+        />
         <Route
           path="*"
           element={

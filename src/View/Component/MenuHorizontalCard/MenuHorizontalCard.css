@@ -1,0 +1,39 @@
+.menu-horizontal-card-container {
+  display: flex;
+  width: 100%;
+  background-color: #FFFFFF;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  cursor: pointer;
+}
+.menu-horizontal-card-container img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+}
+
+.menu-card-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.menu-card-description p {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.menu-card-description p:nth-child(2) {
+  color: #CACACA;
+  font-weight: 700;
+}
+
+.menu-card-price {
+  color: #36AB27;
+  font-size: 14px;
+}/*# sourceMappingURL=MenuHorizontalCard.css.map */

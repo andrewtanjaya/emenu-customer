@@ -1,0 +1,34 @@
+.bottom-navbar-container {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90px;
+  background-color: #FFFFFF;
+}
+.bottom-navbar-container ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.bottom-navbar-container ul li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.navbar-links {
+  text-decoration: none;
+  color: black;
+}
+
+.active-navbar {
+  color: #36AB27;
+  font-weight: 600;
+}/*# sourceMappingURL=BottomNavbar.css.map */

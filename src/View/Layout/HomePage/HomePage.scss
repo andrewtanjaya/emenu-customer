@@ -1,0 +1,28 @@
+@import "../../../Utils/variables";
+
+
+@media only screen and (max-width: $md) {
+
+}
+
+@media only screen and (max-width: $md) {
+
+}
+
+@media only screen and (max-width: $sm) {
+    .banner-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 90vw;
+        height:300px;
+        Image{
+            width: 90%;
+            height: 200px;
+        }
+        iframe{
+            width: 90%;
+            height: 200px;
+        }
+    }
+}

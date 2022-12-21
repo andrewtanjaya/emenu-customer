@@ -1,0 +1,17 @@
+@media only screen and (max-width: 576px) {
+  .banner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 90vw;
+    height: 300px;
+  }
+  .banner-container Image {
+    width: 90%;
+    height: 200px;
+  }
+  .banner-container iframe {
+    width: 90%;
+    height: 200px;
+  }
+}/*# sourceMappingURL=HomePage.css.map */

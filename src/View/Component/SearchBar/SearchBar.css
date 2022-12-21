@@ -1,0 +1,34 @@
+.customer-search-bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 16px;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  box-sizing: border-box;
+}
+
+.search-bar-input {
+  border: none;
+  width: calc(100% - 16px);
+}
+
+.search-bar-input:focus {
+  outline: none;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #909;
+  opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #CACACA;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+  color: #CACACA;
+}/*# sourceMappingURL=SearchBar.css.map */

@@ -1,0 +1,30 @@
+.category-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  -moz-column-gap: 4px;
+       column-gap: 4px;
+  cursor: pointer;
+}
+.category-card-container p {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.category-card-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.active-category {
+  background-color: #36AB27;
+  box-shadow: 0px 5px 14px rgba(54, 171, 39, 0.35);
+}
+.active-category p {
+  color: #FFFFFF;
+}/*# sourceMappingURL=CategoryCard.css.map */
