@@ -1,13 +1,14 @@
 .customer-menu-page-container {
   position: relative;
   top: 0;
-  width: 100%;
+  width: 100vw;
   max-width: 500px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  box-sizing: border-box;
 }
 
 .customer-menu-page-header {
@@ -15,6 +16,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  box-sizing: border-box;
 }
 .customer-menu-page-header p {
   margin: 0;
