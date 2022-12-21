@@ -25,4 +25,15 @@
             height: 200px;
         }
     }
+
+    .recommended-container{
+        display: flex;
+        overflow-x: auto;
+        border: 1px solid white;
+        img{
+            width: 100px;
+            height: 150px;
+        }
+    }
+    
 }

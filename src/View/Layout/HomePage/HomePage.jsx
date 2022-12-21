@@ -7,10 +7,13 @@ import {
 import { FoodController } from "../../../Controller/FoodController";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Carousel, Image } from "antd";
+import { Card, Carousel, Image, Skeleton } from "antd";
 import "./HomePage.css";
+import { v4 as uuid } from "uuid";
+import Meta from "antd/es/card/Meta";
 
 function HomePage() {
+  const [isRecommededFoodLoad, setisRecommededFoodLoad] = useState(true);
   const [recommededFood, setRecommendedFood] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
   const [restaurantBannerUrl, setRestaurantBannerUrl] = useState([]);
@@ -35,14 +38,15 @@ function HomePage() {
     return a.totalSold > b.totalSold ? 1 : -1;
   }
   useEffect(() => {
+    setisRecommededFoodLoad(true);
     if (!isFoodLoad) {
-      let sortedBaseTotalSales = food.sort((a, b) => {
-        sort(a, b);
-      });
+      let sortedBaseTotalSales = food.sort((a, b) => b.totalSold - a.totalSold);
       let recommendedFilter = food.filter((data) => {
-        return data.tags.includes("RECOMMEDED");
+        return data.tags.includes("RECOMMENDED");
       });
       setRecommendedFood(recommendedFilter);
+      setBestSeller(sortedBaseTotalSales);
+      setisRecommededFoodLoad(false);
     }
   }, [food]);
 
@@ -62,38 +66,11 @@ function HomePage() {
   };
   return (
     <>
-      {console.log(restaurantBannerUrl)}
       <h1>HomePage</h1>
-      <div className="banner-container">
-        <Carousel>
-          {restaurantBannerUrl.map((url) => {
-            return <Image src={url}></Image>;
-          })}
-          <iframe
-            src="https://www.youtube.com/embed/GmyD2wdn7pE"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          ></iframe>
-          <iframe
-            src="https://www.youtube.com/embed/GmyD2wdn7pE"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          ></iframe>
-          {/* <div>
-            <h3 style={contentStyle}>1</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div> */}
-        </Carousel>
+      <div className="home-container">
+        <div className="banner-container"></div>
+        <div className="recommended-container"></div>
+        <div className="best-seller-container"></div>
       </div>
     </>
   );

@@ -50,6 +50,7 @@ function WelcomePage() {
       orderId: orderId,
       restaurantId: restaurantId,
       foodOrderType: OrderType.DINE_IN,
+      restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));
     navigate("/home");
@@ -60,6 +61,7 @@ function WelcomePage() {
       orderId: orderId,
       restaurantId: restaurantId,
       foodOrderType: OrderType.TAKEAWAY,
+      restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));
     navigate("/home");
