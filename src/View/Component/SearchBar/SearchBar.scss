@@ -5,10 +5,11 @@
     justify-content: center;
     align-items: center;
     background-color: $white;
-    width: 80%;
+    width: 100%;
     padding: 14px 20px;
     border-radius: 16px;
     column-gap: 6px;
+    box-sizing: border-box;
 }
 
 .search-bar-input{

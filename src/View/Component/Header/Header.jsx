@@ -1,7 +1,7 @@
 import { CloseOutlined } from "@ant-design/icons";
 import React from "react";
 import { useEffect } from "react";
-import "./Navbar.css";
+import "./Header.css";
 
 function Navbar() {
   const orderData = JSON.parse(sessionStorage.getItem("orderData"));

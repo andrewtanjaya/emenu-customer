@@ -8,6 +8,9 @@ body{
   height: 100vh;
   margin: 0;
   background-color: #F9F9F9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .App-logo {
