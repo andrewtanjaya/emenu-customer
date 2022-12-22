@@ -1,12 +1,12 @@
 import { CloseOutlined } from "@ant-design/icons";
 import React from "react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 
 function Navbar() {
   const orderData = JSON.parse(sessionStorage.getItem("orderData"));
 
-  console.log("test");
   return (
     <div className="customer-navbar-container">
       <div className="customer-navbar-restaurant-logo">
@@ -26,9 +26,14 @@ function Navbar() {
         </div>
       )}
 
-      <div className="customer-navbar-exit">
-        <CloseOutlined />
-      </div>
+      <Link
+        to={"/welcome?orderId=" + orderData.orderId}
+        style={{ color: "black" }}
+      >
+        <div className="customer-navbar-exit">
+          <CloseOutlined />
+        </div>
+      </Link>
     </div>
   );
 }

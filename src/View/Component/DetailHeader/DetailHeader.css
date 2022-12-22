@@ -1,0 +1,11 @@
+.detail-navbar-container {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  padding: 40px 24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}/*# sourceMappingURL=DetailHeader.css.map */

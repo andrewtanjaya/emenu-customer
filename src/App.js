@@ -7,6 +7,7 @@ import CartPage from "./View/Layout/CartPage/CartPage";
 import BillPage from "./View/Layout/BillPage/BillPage";
 import MenuPage from "./View/Layout/MenuPage/MenuPage";
 import Auth from "./Utils/Auth";
+import DetailMenuPage from "./View/Layout/DetailMenuPage/DetailMenuPage";
 
 function App() {
   const navigate = useNavigate();
@@ -27,6 +28,14 @@ function App() {
           element={
             <Auth>
               <MenuPage />
+            </Auth>
+          }
+        />
+        <Route
+          path="/detail"
+          element={
+            <Auth>
+              <DetailMenuPage />
             </Auth>
           }
         />
