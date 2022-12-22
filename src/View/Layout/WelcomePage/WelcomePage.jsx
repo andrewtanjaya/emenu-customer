@@ -7,6 +7,8 @@ import { OrderController } from "../../../Controller/OrderController";
 import { RestaurantController } from "../../../Controller/RestaurantController";
 import { OrderType } from "../../../Enum/OrderType";
 import { PaymentStatus } from "../../../Enum/PaymentStatus";
+import "./WelcomePage.css";
+
 function WelcomePage() {
   const navigate = useNavigate();
   const [isLoad, setIsLoad] = useState(true);
@@ -15,6 +17,7 @@ function WelcomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const orderId = searchParams.get("orderId");
   const [restaurantId, setRestaurantId] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
 
   useEffect(() => {
     if (!orderId) {
@@ -31,6 +34,7 @@ function WelcomePage() {
               } else {
                 setIsDineIn(true);
               }
+              setRestaurantName(restoResp.restaurantName);
               setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
               setRestaurantId(orderResp.restaurantId);
               setIsLoad(false);
@@ -69,47 +73,53 @@ function WelcomePage() {
   return (
     <>
       {!isLoad && (
-        <div>
-          <Avatar
-            size={{
-              xs: 24,
-              sm: 32,
-              md: 40,
-              lg: 64,
-              xl: 80,
-              xxl: 100,
-            }}
-            src={restaurantLogoUrl}
-          />
-          {isDineIn ? (
-            <>
-              <Button
-                type="primary"
-                onClick={() => {
-                  handleDineIn();
-                }}
-              >
-                Dine In
-              </Button>
+        <div className="welcome-page-container">
+          <div className="image-container">
+            <img src={restaurantLogoUrl}></img>
+            {/* <Avatar
+              size={{
+                xs: 24,
+                sm: 32,
+                md: 40,
+                lg: 64,
+                xl: 80,
+                xxl: 100,
+              }}
+              src={restaurantLogoUrl}
+            /> */}
+          </div>
+          <div className="button-container">
+            <h2>{restaurantName}</h2>
+            {isDineIn ? (
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleDineIn();
+                  }}
+                >
+                  DINE-IN
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleTakeaway();
+                  }}
+                >
+                  TAKEAWAY
+                </Button>
+              </>
+            ) : (
               <Button
                 type="primary"
                 onClick={() => {
                   handleTakeaway();
                 }}
               >
-                Takeaway
+                Menu
               </Button>
-            </>
-          ) : (
-            <Button
-              type="primary"
-              onClick={() => {
-                handleTakeaway();
-              }}
-            >
-              Menu
-            </Button>
-          )}
+            )}
+          </div>
         </div>
       )}
     </>

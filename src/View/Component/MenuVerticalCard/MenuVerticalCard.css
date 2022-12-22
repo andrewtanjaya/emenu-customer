@@ -1,0 +1,39 @@
+.menu-vertical-card-container {
+  display: flex;
+  width: 130px;
+  background-color: #FFFFFF;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 10px;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  cursor: pointer;
+}
+.menu-vertical-card-container img {
+  width: 130px;
+  height: 110px;
+  border-radius: 10px;
+}
+
+.menu-card-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.menu-card-description p {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.menu-card-description b {
+  color: #36AB27;
+  font-size: 14px;
+}
+
+.menu-card-price {
+  color: #36AB27;
+  font-size: 14px;
+}/*# sourceMappingURL=MenuVerticalCard.css.map */

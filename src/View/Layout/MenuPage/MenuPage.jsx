@@ -77,7 +77,7 @@ function MenuPage() {
           />
         </div>
       </div>
-      <BottomNavbar/>
+      <BottomNavbar />
     </div>
   );
 }

@@ -11,10 +11,19 @@ import { Card, Carousel, Image, Skeleton } from "antd";
 import "./HomePage.css";
 import { v4 as uuid } from "uuid";
 import Meta from "antd/es/card/Meta";
+import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
+import Navbar from "../../Component/Header/Header";
+import MenuHorizontalCard from "../../Component/MenuHorizontalCard/MenuHorizontalCard";
+import { is } from "@babel/types";
+import MenuVerticalCard from "../../Component/MenuVerticalCard/MenuVerticalCard";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import BannerSlider from "../../Component/Slider/BannerSlider";
 
 function HomePage() {
   const [isRecommededFoodLoad, setisRecommededFoodLoad] = useState(true);
-  const [recommededFood, setRecommendedFood] = useState([]);
+  const [isBestSellerFoodLoad, setIsBestSellerFoodLoad] = useState(true);
+  const [recommendedFood, setRecommendedFood] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
   const [restaurantBannerUrl, setRestaurantBannerUrl] = useState([]);
   const [restaurantVideoUrl, setRestaurantVideoUrl] = useState([]);
@@ -44,9 +53,11 @@ function HomePage() {
       let recommendedFilter = food.filter((data) => {
         return data.tags.includes("RECOMMENDED");
       });
+      // console.log(recommendedFilter);
       setRecommendedFood(recommendedFilter);
       setBestSeller(sortedBaseTotalSales);
       setisRecommededFoodLoad(false);
+      setIsBestSellerFoodLoad(false);
     }
   }, [food]);
 
@@ -64,13 +75,65 @@ function HomePage() {
     background: "#364d79",
     width: "400px",
   };
+
+  function showRecommendedFood() {
+    let rows = [];
+    for (let i = 0; i < recommendedFood.length; i++) {
+      console.log(recommendedFood[i]);
+      rows.push(
+        <MenuVerticalCard
+          key={recommendedFood[i].foodId}
+          foodPicture={recommendedFood[i].foodPictures[0]}
+          foodName={recommendedFood[i].foodName}
+          foodPrice={`IDR. ${recommendedFood[i].foodPrice}`}
+        ></MenuVerticalCard>
+      );
+    }
+    return <>{rows}</>;
+  }
+
+  function showBestSellerFood() {
+    let rows = [];
+    for (let i = 0; i < 5; i++) {
+      // console.log(bestSeller[i].foodPictures[i]);
+      rows.push(
+        <MenuHorizontalCard
+          key={bestSeller[i].foodId}
+          foodPicture={bestSeller[i].foodPictures[0]}
+          foodName={bestSeller[i].foodName}
+          foodPrice={`IDR. ${bestSeller[i].foodPrice}`}
+          totalSold={bestSeller[i].totalSold}
+        ></MenuHorizontalCard>
+      );
+    }
+    return <>{rows}</>;
+  }
   return (
     <>
-      <h1>HomePage</h1>
       <div className="home-container">
-        <div className="banner-container"></div>
-        <div className="recommended-container"></div>
-        <div className="best-seller-container"></div>
+        <Navbar />
+        <div className="home-page-content">
+          <div className="banner-container">
+            <BannerSlider></BannerSlider>
+          </div>
+          <div className="recommended-title">
+            <b>Recommended</b>
+            <a href="/menu?filter=recommended">See All</a>
+          </div>
+          <div className="recommended-container">
+            {!isRecommededFoodLoad && showRecommendedFood()}
+          </div>
+          <div className="best-seller-title">
+            <b>Best Seller</b>
+
+            <a href="/menu?filter=best-seller">See All</a>
+          </div>
+          <div className="best-seller-container">
+            {!isBestSellerFoodLoad && showBestSellerFood()}
+          </div>
+        </div>
+
+        <BottomNavbar />
       </div>
     </>
   );
