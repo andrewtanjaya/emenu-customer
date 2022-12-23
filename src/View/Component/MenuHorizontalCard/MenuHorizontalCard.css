@@ -22,11 +22,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  width: 50%;
 }
 .menu-card-description p {
   margin: 0;
   padding: 0;
   font-size: 12px;
+  color: black;
 }
 .menu-card-description p:nth-child(2) {
   color: #CACACA;
@@ -34,6 +36,15 @@
 }
 
 .menu-card-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
   color: #36AB27;
   font-size: 14px;
+}
+
+.menu-horizontal-card-link {
+  width: 100%;
+  text-decoration: none;
 }/*# sourceMappingURL=MenuHorizontalCard.css.map */

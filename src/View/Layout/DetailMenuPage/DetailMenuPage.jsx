@@ -15,6 +15,7 @@ function DetailMenuPage() {
   const [groupData, setGroupData] = useState([]);
   const foodId = searchParams.get("foodId");
   const [readMore, setReadMore] = useState(true);
+  const [qty, setQty] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
     if (!foodId) {
@@ -73,10 +74,8 @@ function DetailMenuPage() {
           </div>
         ) : (
           <div className="detail-menu-page-food-description-long">
-            <p>
-              {foodData.foodDescription}{" "}
-              <span onClick={() => setReadMore(true)}>Read Less</span>
-            </p>
+            <p>{foodData.foodDescription}</p>
+            <span onClick={() => setReadMore(true)}>Read Less</span>
           </div>
         )}
 
@@ -92,12 +91,53 @@ function DetailMenuPage() {
           <p>
             <b>Notes</b>
           </p>
-          <textarea
-            placeholder="Notes"
-            name=""
-            id=""
-            rows="5"
-          ></textarea>
+          <textarea placeholder="Notes" name="" id="" rows="6"></textarea>
+        </div>
+
+        <div className="detail-menu-page-bottom-nav">
+          <div className="add-to-cart-quantity-container">
+            <p>
+              <b>Item Quantity</b>
+            </p>
+            <div className="input-number-stepper">
+              <div
+                className="input-number-stepper-minus"
+                onClick={() => {
+                  setQty((qty) => {
+                    if (qty > 1) {
+                      return qty - 1;
+                    }
+                    return qty;
+                  });
+                }}
+              >
+                -
+              </div>
+              <input type="number" defaultValue={1} value={qty} disabled />
+              <div className="input-number-stepper-plus" onClick={() => {
+                  setQty((qty) => {
+                      return qty + 1;
+                  });
+                }}>+</div>
+            </div>
+          </div>
+          <div
+            className={
+              foodData.foodAvailability
+                ? "add-to-cart-button active"
+                : "add-to-cart-button inactive"
+            }
+          >
+            {foodData.foodAvailability ? (
+              <p>
+                <b>Add To Cart - 20.000</b>
+              </p>
+            ) : (
+              <p>
+                <b>Food is not available</b>
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

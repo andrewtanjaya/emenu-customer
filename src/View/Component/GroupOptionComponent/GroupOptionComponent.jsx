@@ -14,7 +14,7 @@ function GroupOptionComponent(props) {
                     <p>{option.optionName}</p>
                     <div className="option-container-left">
                         <p>{option.optionPrice != 0 ? "+ IDR. " + option.optionPrice : "Free"}</p>
-                        <input type="radio" name={props.group.groupName}/>
+                        <input type="radio" name={props.group.groupName} value={props.group.groupName}/>
                     </div>
                 </div>
             )
