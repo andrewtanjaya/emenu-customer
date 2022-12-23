@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
+  background-color: #F9F9F9;
 }
 
 .customer-menu-page-header {
@@ -35,7 +36,7 @@
   align-items: center;
   flex-direction: column;
   row-gap: 20px;
-  padding: 0px 20px;
+  padding: 0px 25px;
   box-sizing: border-box;
 }
 

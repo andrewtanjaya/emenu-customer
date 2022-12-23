@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: flex-start;
     box-sizing: border-box;
+    background-color: $bg-color;
 }
 .customer-menu-page-header{
     display: flex;
@@ -36,9 +37,10 @@
     align-items: center;
     flex-direction: column;
     row-gap: 20px;
-    padding: 0px 20px;
+    padding: 0px 25px;
     box-sizing: border-box;
 }
+
 
 .category-list-container{
     height: 60px;

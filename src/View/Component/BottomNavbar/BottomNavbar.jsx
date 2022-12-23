@@ -8,7 +8,6 @@ function BottomNavbar() {
 
   useEffect(() => {
     setActiveNavbar(window.location.pathname);
-    console.log(window.location.pathname)
   }, []);
 
   return (
