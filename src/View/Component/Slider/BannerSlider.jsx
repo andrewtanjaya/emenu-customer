@@ -1,7 +1,32 @@
 import React from "react";
 import Slider from "react-slick";
 import "./BannerSlider.css";
-function BannerSlider() {
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    ></div>
+  );
+}
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block" }}
+      onClick={onClick}
+    ></div>
+  );
+}
+function BannerSlider(props) {
   const settings = {
     dots: true,
     infinite: true,
@@ -9,39 +34,29 @@ function BannerSlider() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
+
   return (
     <>
       <div>
         <Slider {...settings}>
-          <img src="https://images.unsplash.com/photo-1484591974057-265bb767ef71?ixlib=rb-4.0.3&w=1080&fit=max&q=80&fm=jpg&crop=entropy&cs=tinysrgb"></img>
-          <img src="https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?ixlib=rb-4.0.3&w=1080&fit=max&q=80&fm=jpg&crop=entropy&cs=tinysrgb"></img>
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&w=1080&fit=max&q=80&fm=jpg&crop=entropy&cs=tinysrgb"></img>
-          <iframe
-            src="https://www.youtube.com/embed/Idt6hRb_8g8"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          {/* <div>
-            <h3>1</h3>
-          </div>
-          <div>
-            <h3>2</h3>
-          </div>
-          <div>
-            <h3>3</h3>
-          </div>
-          <div>
-            <h3>4</h3>
-          </div>
-          <div>
-            <h3>5</h3>
-          </div>
-          <div>
-            <h3>6</h3>
-          </div> */}
+          {props.imageUrl.map((url) => {
+            return <img key={url} src={url}></img>;
+          })}
+          {props.videoUrl.map((url) => {
+            return (
+              <iframe
+                key={url}
+                src={url}
+                title={url}
+                // frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            );
+          })}
         </Slider>
       </div>
     </>

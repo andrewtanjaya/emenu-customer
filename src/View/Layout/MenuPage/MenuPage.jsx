@@ -1,11 +1,110 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MenuPage.css";
 import Navbar from "../../Component/Header/Header";
 import SearchBar from "../../Component/SearchBar/SearchBar";
 import CategoryCard from "../../Component/CategoryCard/CategoryCard";
 import MenuHorizontalCard from "../../Component/MenuHorizontalCard/MenuHorizontalCard";
 import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
+import { FoodController } from "../../../Controller/FoodController";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { CategoryController } from "../../../Controller/CategoryController";
+import { useSearchParams } from "react-router-dom";
+
 function MenuPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filter = searchParams.get("filter");
+  const orderData = JSON.parse(sessionStorage.getItem("orderData"));
+  const [isLoad, setIsLoad] = useState(true);
+  const [foodFiltered, setFoodFiltered] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [food, isFoodLoad, foodError] = useCollectionData(
+    FoodController.getAllFoodsByRestaurantId(orderData.restaurantId),
+    {
+      idField: "id",
+    }
+  );
+
+  const [category, isCategoryLoad, categoryError] = useCollectionData(
+    CategoryController.getAllCategoriesByRestaurantId(orderData.restaurantId),
+    {
+      idField: "id",
+    }
+  );
+
+  useEffect(() => {
+    if (filter === "recommended") {
+      setCategoryFilter("recommended");
+      setActiveCategory("recommended");
+    } else if (filter === "best") {
+      setCategoryFilter("best");
+      setActiveCategory("best");
+    }
+  }, []);
+  useEffect(() => {
+    setIsLoad(true);
+    if (!isFoodLoad) {
+      setFoodFiltered(
+        food.filter((u) => {
+          let foodName = u.foodName.toLowerCase();
+          if (categoryFilter === "all") {
+            return foodName.includes(keyword.toLowerCase());
+          } else if (categoryFilter === "recommended") {
+            return (
+              u.tags.includes("RECOMMENDED") &&
+              foodName.includes(keyword.toLowerCase())
+            );
+          } else if (categoryFilter === "best") {
+            return u.totalSold != 0 && foodName.includes(keyword.toLowerCase());
+          } else if (categoryFilter !== "") {
+            return (
+              u.categoryId.includes(categoryFilter) &&
+              foodName.includes(keyword.toLowerCase())
+            );
+          }
+
+          return foodName.includes(keyword.toLowerCase());
+        })
+      );
+      setIsLoad(false);
+    }
+  }, [food, keyword, categoryFilter]);
+
+  function showAllFood() {
+    let rows = [];
+    for (let i = 0; i < foodFiltered.length; i++) {
+      rows.push(
+        <MenuHorizontalCard
+          key={foodFiltered[i].foodId}
+          foodPicture={foodFiltered[i].foodPictures[0]}
+          foodName={foodFiltered[i].foodName}
+          foodPrice={`IDR. ${foodFiltered[i].foodPrice}`}
+          totalSold={foodFiltered[i].totalSold}
+        ></MenuHorizontalCard>
+      );
+    }
+    return <>{rows}</>;
+  }
+
+  function showAllCategory() {
+    let rows = [];
+    for (let i = 0; i < category.length; i++) {
+      rows.push(
+        <CategoryCard
+          active={activeCategory === category[i].categoryId ? true : false}
+          key={category[i].categoryId}
+          icon={category[i].categoryIcon}
+          name={category[i].categoryName}
+          id={category[i].categoryId}
+          setCategoryFilter={setCategoryFilter}
+          setActiveCategory={setActiveCategory}
+        />
+      );
+    }
+    return <>{rows}</>;
+  }
+
   return (
     <div className="customer-menu-page-container">
       <Navbar />
@@ -16,66 +115,34 @@ function MenuPage() {
             like <b>to eat?</b>
           </p>
         </div>
-        <SearchBar />
+        <SearchBar setKeyword={setKeyword} />
 
         <div className="category-list-container">
           <CategoryCard
-            active={true}
+            active={activeCategory === "all" ? true : false}
             icon="https://img.icons8.com/fluency/48/null/cake.png"
             name="All"
+            setCategoryFilter={setCategoryFilter}
+            setActiveCategory={setActiveCategory}
           />
           <CategoryCard
+            active={activeCategory === "recommended" ? true : false}
             icon="https://img.icons8.com/fluency/48/null/cake.png"
             name="Recommended"
+            setCategoryFilter={setCategoryFilter}
+            setActiveCategory={setActiveCategory}
           />
           <CategoryCard
+            active={activeCategory === "best" ? true : false}
             icon="https://img.icons8.com/fluency/48/null/cake.png"
             name="Best Seller"
+            setCategoryFilter={setCategoryFilter}
+            setActiveCategory={setActiveCategory}
           />
-          <CategoryCard
-            icon="https://img.icons8.com/fluency/48/null/cake.png"
-            name="Best Seller"
-          />
+          {!isCategoryLoad && showAllCategory()}
         </div>
 
-        <div className="menu-list-container">
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-          <MenuHorizontalCard
-            foodPicture="https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/restaurant-logo%2FMemojiSO.png50543d2f-53e5-46f3-aa59-65526baade80?alt=media&token=d3f1c800-4b78-42b4-9325-c196d3e8d4ed"
-            foodName="Grilled Cheese Salad"
-            foodPrice="IDR. 20.000"
-            totalSold="99"
-          />
-        </div>
+        <div className="menu-list-container">{!isLoad && showAllFood()}</div>
       </div>
       <BottomNavbar />
     </div>

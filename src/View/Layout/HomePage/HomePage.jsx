@@ -16,8 +16,7 @@ import Navbar from "../../Component/Header/Header";
 import MenuHorizontalCard from "../../Component/MenuHorizontalCard/MenuHorizontalCard";
 import { is } from "@babel/types";
 import MenuVerticalCard from "../../Component/MenuVerticalCard/MenuVerticalCard";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
 import BannerSlider from "../../Component/Slider/BannerSlider";
 
 function HomePage() {
@@ -53,7 +52,6 @@ function HomePage() {
       let recommendedFilter = food.filter((data) => {
         return data.tags.includes("RECOMMENDED");
       });
-      // console.log(recommendedFilter);
       setRecommendedFood(recommendedFilter);
       setBestSeller(sortedBaseTotalSales);
       setisRecommededFoodLoad(false);
@@ -79,7 +77,6 @@ function HomePage() {
   function showRecommendedFood() {
     let rows = [];
     for (let i = 0; i < recommendedFood.length; i++) {
-      console.log(recommendedFood[i]);
       rows.push(
         <MenuVerticalCard
           key={recommendedFood[i].foodId}
@@ -95,7 +92,6 @@ function HomePage() {
   function showBestSellerFood() {
     let rows = [];
     for (let i = 0; i < 5; i++) {
-      // console.log(bestSeller[i].foodPictures[i]);
       rows.push(
         <MenuHorizontalCard
           key={bestSeller[i].foodId}
@@ -114,7 +110,12 @@ function HomePage() {
         <Navbar />
         <div className="home-page-content">
           <div className="banner-container">
-            <BannerSlider></BannerSlider>
+            {!isRestaurantLoad && (
+              <BannerSlider
+                imageUrl={restaurant.restaurantBanners}
+                videoUrl={restaurant.videoUrl}
+              ></BannerSlider>
+            )}
           </div>
           <div className="recommended-title">
             <b>Recommended</b>
@@ -126,7 +127,7 @@ function HomePage() {
           <div className="best-seller-title">
             <b>Best Seller</b>
 
-            <a href="/menu?filter=best-seller">See All</a>
+            <a href="/menu?filter=best">See All</a>
           </div>
           <div className="best-seller-container">
             {!isBestSellerFoodLoad && showBestSellerFood()}
