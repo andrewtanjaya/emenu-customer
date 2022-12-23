@@ -1,1 +1,29 @@
-/*# sourceMappingURL=WelcomePage.css.map */
+.welcome-page-container {
+  position: relative;
+  top: 0;
+  width: 100vw;
+  max-width: 500px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #F9F9F9;
+}
+
+.image-container img {
+  width: 170px;
+  height: 170px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.button-container Button {
+  background-color: #36AB27;
+}/*# sourceMappingURL=WelcomePage.css.map */

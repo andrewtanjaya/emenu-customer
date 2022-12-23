@@ -7,11 +7,22 @@ import {
 import { FoodController } from "../../../Controller/FoodController";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Carousel, Image } from "antd";
+import { Card, Carousel, Image, Skeleton } from "antd";
 import "./HomePage.css";
+import { v4 as uuid } from "uuid";
+import Meta from "antd/es/card/Meta";
+import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
+import Navbar from "../../Component/Header/Header";
+import MenuHorizontalCard from "../../Component/MenuHorizontalCard/MenuHorizontalCard";
+import { is } from "@babel/types";
+import MenuVerticalCard from "../../Component/MenuVerticalCard/MenuVerticalCard";
+
+import BannerSlider from "../../Component/Slider/BannerSlider";
 
 function HomePage() {
-  const [recommededFood, setRecommendedFood] = useState([]);
+  const [isRecommededFoodLoad, setisRecommededFoodLoad] = useState(true);
+  const [isBestSellerFoodLoad, setIsBestSellerFoodLoad] = useState(true);
+  const [recommendedFood, setRecommendedFood] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
   const [restaurantBannerUrl, setRestaurantBannerUrl] = useState([]);
   const [restaurantVideoUrl, setRestaurantVideoUrl] = useState([]);
@@ -35,14 +46,16 @@ function HomePage() {
     return a.totalSold > b.totalSold ? 1 : -1;
   }
   useEffect(() => {
+    setisRecommededFoodLoad(true);
     if (!isFoodLoad) {
-      let sortedBaseTotalSales = food.sort((a, b) => {
-        sort(a, b);
-      });
+      let sortedBaseTotalSales = food.sort((a, b) => b.totalSold - a.totalSold);
       let recommendedFilter = food.filter((data) => {
-        return data.tags.includes("RECOMMEDED");
+        return data.tags.includes("RECOMMENDED");
       });
       setRecommendedFood(recommendedFilter);
+      setBestSeller(sortedBaseTotalSales);
+      setisRecommededFoodLoad(false);
+      setIsBestSellerFoodLoad(false);
     }
   }, [food]);
 
@@ -60,40 +73,68 @@ function HomePage() {
     background: "#364d79",
     width: "400px",
   };
+
+  function showRecommendedFood() {
+    let rows = [];
+    for (let i = 0; i < recommendedFood.length; i++) {
+      rows.push(
+        <MenuVerticalCard
+          key={recommendedFood[i].foodId}
+          foodPicture={recommendedFood[i].foodPictures[0]}
+          foodName={recommendedFood[i].foodName}
+          foodPrice={`IDR. ${recommendedFood[i].foodPrice}`}
+        ></MenuVerticalCard>
+      );
+    }
+    return <>{rows}</>;
+  }
+
+  function showBestSellerFood() {
+    let rows = [];
+    for (let i = 0; i < 5; i++) {
+      rows.push(
+        <MenuHorizontalCard
+          key={bestSeller[i].foodId}
+          foodPicture={bestSeller[i].foodPictures[0]}
+          foodName={bestSeller[i].foodName}
+          foodPrice={`IDR. ${bestSeller[i].foodPrice}`}
+          totalSold={bestSeller[i].totalSold}
+        ></MenuHorizontalCard>
+      );
+    }
+    return <>{rows}</>;
+  }
   return (
     <>
-      {console.log(restaurantBannerUrl)}
-      <h1>HomePage</h1>
-      <div className="banner-container">
-        <Carousel>
-          {restaurantBannerUrl.map((url) => {
-            return <Image src={url}></Image>;
-          })}
-          <iframe
-            src="https://www.youtube.com/embed/GmyD2wdn7pE"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          ></iframe>
-          <iframe
-            src="https://www.youtube.com/embed/GmyD2wdn7pE"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          ></iframe>
-          {/* <div>
-            <h3 style={contentStyle}>1</h3>
+      <div className="home-container">
+        <Navbar />
+        <div className="home-page-content">
+          <div className="banner-container">
+            {!isRestaurantLoad && (
+              <BannerSlider
+                imageUrl={restaurant.restaurantBanners}
+                videoUrl={restaurant.videoUrl}
+              ></BannerSlider>
+            )}
           </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
+          <div className="recommended-title">
+            <b>Recommended</b>
+            <a href="/menu?filter=recommended">See All</a>
           </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
+          <div className="recommended-container">
+            {!isRecommededFoodLoad && showRecommendedFood()}
           </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div> */}
-        </Carousel>
+          <div className="best-seller-title">
+            <b>Best Seller</b>
+
+            <a href="/menu?filter=best">See All</a>
+          </div>
+          <div className="best-seller-container">
+            {!isBestSellerFoodLoad && showBestSellerFood()}
+          </div>
+        </div>
+
+        <BottomNavbar />
       </div>
     </>
   );
