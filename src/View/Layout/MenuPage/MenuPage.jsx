@@ -77,6 +77,7 @@ function MenuPage() {
       rows.push(
         <MenuHorizontalCard
           key={foodFiltered[i].foodId}
+          foodId={foodFiltered[i].foodId}
           foodPicture={foodFiltered[i].foodPictures[0]}
           foodName={foodFiltered[i].foodName}
           foodPrice={`IDR. ${foodFiltered[i].foodPrice}`}

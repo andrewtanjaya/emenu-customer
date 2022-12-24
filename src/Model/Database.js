@@ -30,9 +30,9 @@ export class Database {
     return foodSnap;
   }
 
-  static getAllGroupsByFoodId(foodId) {
-    const groupSnap = query(groupsRef, where("foodId", "==", foodId));
-    return groupSnap;
+  static async getAllGroupsByFoodId(foodId) {
+    const groupSnaps = await getDocs(query(groupsRef, where("foodId", "==", foodId)));
+    return groupSnaps;
   }
 
   static getAllOptionsByGroupId(groupId) {
