@@ -92,32 +92,29 @@ function WelcomePage() {
             <h2>{restaurantName}</h2>
             {isDineIn ? (
               <>
-                <Button
-                  type="primary"
+                <button
                   onClick={() => {
                     handleDineIn();
                   }}
                 >
                   DINE-IN
-                </Button>
-                <Button
-                  type="primary"
+                </button>
+                <button
                   onClick={() => {
                     handleTakeaway();
                   }}
                 >
                   TAKEAWAY
-                </Button>
+                </button>
               </>
             ) : (
-              <Button
-                type="primary"
+              <button
                 onClick={() => {
                   handleTakeaway();
                 }}
               >
                 Menu
-              </Button>
+              </button>
             )}
           </div>
         </div>

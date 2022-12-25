@@ -7,25 +7,25 @@ function CartItemCard(props) {
     <div className="cart-item-card-container">
       <img src={props.foodPicture} alt="" />
       <div className="cart-item-card-description">
-        <b>1 x Hamburger</b>
+        <span>1 x Hamburger</span>
         <span className="info-container">
-          <b>Spicy:&nbsp;&nbsp;</b>
+          <span className="group-option-cart-name">Spicy &nbsp;:</span>
           <p>sedang</p>
         </span>
         <span className="info-container">
-          <b>Notes:&nbsp;&nbsp;</b>
-          <p>sedangssssssssssssss</p>
+          <span className="group-option-cart-name">Notes :</span>
+          <p>sedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangsssssssssssssssedangssssssssssssss</p>
         </span>
         <div className="action-button-container">
-          <Button type="primary">Edit</Button>
-          <Button type="default" danger>
+          <button >Edit</button>
+          <button >
             Delete
-          </Button>
+          </button>
         </div>
       </div>
-      <p className="cart-item-card-price">
-        <b>{props.foodPrice}</b>
-      </p>
+      <div className="cart-item-card-price">
+        <p><b>{props.foodPrice}</b></p>
+      </div>
     </div>
   );
 }
