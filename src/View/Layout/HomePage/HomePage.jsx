@@ -80,6 +80,7 @@ function HomePage() {
       rows.push(
         <MenuVerticalCard
           key={recommendedFood[i].foodId}
+          foodId={recommendedFood[i].foodId}
           foodPicture={recommendedFood[i].foodPictures[0]}
           foodName={recommendedFood[i].foodName}
           foodPrice={`IDR. ${recommendedFood[i].foodPrice}`}
@@ -95,6 +96,7 @@ function HomePage() {
       rows.push(
         <MenuHorizontalCard
           key={bestSeller[i].foodId}
+          foodId={bestSeller[i].foodId}
           foodPicture={bestSeller[i].foodPictures[0]}
           foodName={bestSeller[i].foodName}
           foodPrice={`IDR. ${bestSeller[i].foodPrice}`}
