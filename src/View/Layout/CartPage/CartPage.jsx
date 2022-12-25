@@ -46,8 +46,8 @@ function CartPage() {
             <b>Total</b>
             <b>IDR.119000</b>
           </div>
-          <div className="button-container">
-            <Button type="primary">Order</Button>
+          <div className="button-order-container">
+            <button >Order</button>
           </div>
         </div>
         <BottomNavbar />

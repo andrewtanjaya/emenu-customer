@@ -5,7 +5,7 @@
     width: 100%;
     background-color: $white;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -16,6 +16,12 @@
         height: 70px;
         border-radius: 10px;
     }
+    p{
+        font-size: 14px;
+    }
+    span{
+        font-size: 14px;
+    }
 }
 
 .cart-item-card-description{
@@ -25,6 +31,7 @@
     align-items: flex-start;
     width: 60%;
     column-gap: 0;
+
 }
 
 .cart-item-card-price{
@@ -32,8 +39,11 @@
     justify-content: center;
     align-items: center;
     width: 30%;
+    height: 100%;
     color: $primary-color;
-    font-size: 14px;
+    p {
+        font-size: 14px;
+    }
 }
 
 .info-container{
@@ -41,7 +51,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-   
     p{
         word-break: break-all;
         margin: 0;
@@ -56,6 +65,24 @@
     align-items: center;
     margin-top:5px;
     column-gap: 10px;
+    button{
+        padding: 4px 10px;
+        background-color: $white;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:nth-child(1){
+        border: 1px solid $primary-color;
+        color: $primary-color;
+    }
+    button:nth-child(2){
+        border: 1px solid $red;
+        color: $red;
+    }
+}
+
+.group-option-cart-name{
+    min-width: 52px;
 }
 
 

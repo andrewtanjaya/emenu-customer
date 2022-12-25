@@ -15,6 +15,7 @@
 }
 
 .image-container{
+    border-radius: 100px;
     img{
         width: 170px;
         height: 170px;
@@ -30,6 +31,23 @@
 
     Button{
         background-color: $primary-color;
+    }
+}
+
+.button-container{
+    button{
+        width: 225px;
+        padding: 20px 20px;
+        border: none;
+        color: $white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0px 350px 140px rgba(0, 0, 0, 0.01), 0px 197px 118px rgba(0, 0, 0, 0.05), 0px 88px 88px rgba(0, 0, 0, 0.09), 0px 22px 48px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+    }
+    button:nth-child(odd){
+        background-color: $white;
+        color: black
     }
 }
 
