@@ -1,6 +1,6 @@
 @import "../../../Utils/variables";
 
-.home-container{
+.view-cart-container{
     position: relative;
     top: 0;
     width: 100vw;
@@ -14,23 +14,19 @@
     background-color: $bg-color;
 }
 
-.home-page-content{
+.cart-content-container{
     width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     row-gap: 20px;
-    padding: 0px 25px;
+    padding: 0px 20px;
     box-sizing: border-box;
 }
-
-.banner-container{
+.cart-title-container{
     width: 100%;
-}
-
-.recommended-title{
-    width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -41,29 +37,7 @@
     }
 }
 
-.best-seller-title{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    a{
-        color: $primary-color;
-        text-decoration: none;
-    }
-}
-
-.recommended-container{
-    height: 170px;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    column-gap: 10px;
-}
-.best-seller-container{
+.cart-item-container{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -72,13 +46,34 @@
     row-gap: 10px;
 }
 
-@media only screen and (max-width: $md) {
-
+.checkout-container{
+    position: fixed;
+    bottom: 90px;
+    width: 100%;
+    max-width: 500px;
+    height: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 30px;
+    box-sizing: border-box;
+    background-color: $white;
+    Button{
+        height: 45px;
+        width: 100px;
+    }
+    border-bottom: 1px solid #bbb;
 }
 
-@media only screen and (max-width: $md) {
-
-}
-
-@media only screen and (max-width: $sm) {
+.total-amount-container{
+    height: 45px;
+    display: flex;
+    flex-direction: column;
+    b{
+        color: black;
+    }
+    b:nth-child(2){
+        color: $primary-color;
+    }
 }

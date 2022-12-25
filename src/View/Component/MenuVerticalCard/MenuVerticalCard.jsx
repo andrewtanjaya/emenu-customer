@@ -5,18 +5,15 @@ import "./MenuVerticalCard.css";
 function MenuVerticalCard(props) {
   return (
     <Link
-      className="menu-horizontal-card-link"
+      className="menu-vertical-card-link"
       to={"/detail?foodId=" + props.foodId}
     >
       <div className="menu-vertical-card-container">
         <img src={props.foodPicture} alt="" />
-        <div className="menu-card-description">
+        <div className="menu-vertical-card-description">
           <p>{props.foodName}</p>
           <b>{props.foodPrice}</b>
         </div>
-        {/* <p className="menu-card-price">
-        <b>{props.foodPrice}</b>
-      </p> */}
       </div>
     </Link>
   );
