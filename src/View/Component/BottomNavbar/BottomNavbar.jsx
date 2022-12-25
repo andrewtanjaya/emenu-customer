@@ -49,11 +49,11 @@ function BottomNavbar() {
             Cart
           </Link>
         </li>
-        <li onClick={() => setActiveNavbar("/bill")}>
+        <li onClick={() => setActiveNavbar("/view-bill")}>
           <Link
-            to="/bill"
+            to="/view-bill"
             className={
-              activeNavbar === "/bill"
+              activeNavbar === "/view-bill"
                 ? "navbar-links active-navbar"
                 : "navbar-links"
             }

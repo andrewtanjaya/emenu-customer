@@ -1,0 +1,147 @@
+.bill-page-container {
+  position: relative;
+  top: 0;
+  width: 100vw;
+  max-width: 500px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  background-color: #F9F9F9;
+}
+.bill-page-container p {
+  font-size: 14px;
+}
+.bill-page-container hr {
+  border-style: dashed;
+}
+
+.order-item-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.order-item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.order-item-main p:nth-child(1) {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+.order-status-indicator {
+  width: 10px;
+  height: 10px;
+}
+
+.order-item-container-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+  -moz-column-gap: 4px;
+       column-gap: 4px;
+}
+
+.option-group-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+.restaurant-info {
+  margin-bottom: 20px;
+}
+
+.bill-content {
+  width: 90%;
+  position: relative;
+  top: 0;
+  text-align: center;
+  background-color: #FFFFFF;
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 74vh;
+  margin-bottom: 90px;
+}
+.bill-content p {
+  margin: 0;
+  padding: 0;
+}
+
+.bill-page-total-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bill-page-nb-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.bill-page-nb-container p {
+  font-size: 12px;
+}
+
+.detail-bill-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-bill-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+.total-bill-container p {
+  font-size: 16px;
+}
+
+.color-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+}
+.color-info span:nth-child(odd) {
+  width: 10px;
+  height: 10px;
+}
+
+.order-delivered {
+  background-color: #36AB27;
+}
+
+.order-processed {
+  background-color: #F3CC43;
+}
+
+.order-placed {
+  background-color: #F55353;
+}/*# sourceMappingURL=BillPage.css.map */
