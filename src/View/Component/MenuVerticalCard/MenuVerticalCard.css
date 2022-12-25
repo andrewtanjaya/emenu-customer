@@ -1,6 +1,6 @@
 .menu-vertical-card-container {
   display: flex;
-  width: 130px;
+  width: 140px;
   background-color: #FFFFFF;
   flex-direction: column;
   box-sizing: border-box;
@@ -10,12 +10,15 @@
   cursor: pointer;
 }
 .menu-vertical-card-container img {
-  width: 130px;
+  width: 140px;
   height: 110px;
   border-radius: 10px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .menu-card-description {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -24,11 +27,19 @@
   box-sizing: border-box;
 }
 .menu-card-description p {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  width: 100%;
   margin: 0;
   padding: 0;
   font-size: 12px;
 }
 .menu-card-description b {
+  width: 100%;
   color: #36AB27;
   font-size: 14px;
 }

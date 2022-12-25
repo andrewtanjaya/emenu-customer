@@ -22,9 +22,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 50%;
+  width: 40%;
 }
 .menu-card-description p {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
   margin: 0;
   padding: 0;
   font-size: 12px;
@@ -39,7 +45,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 40%;
   color: #36AB27;
   font-size: 14px;
 }
