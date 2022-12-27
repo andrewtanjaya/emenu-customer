@@ -25,6 +25,7 @@
     padding: 0px 20px;
     box-sizing: border-box;
     background-color: $bg-color;
+    
 }
 .cart-title-container{
     width: 100%;
@@ -37,6 +38,11 @@
         color: $primary-color;
         text-decoration: none;
     }
+}
+
+.empty-logo{
+    margin-top: 70px;
+    width: 200px;
 }
 
 .cart-item-container{
@@ -100,4 +106,75 @@
         font-weight: 700;
         font-size: 16px;
     }
+}
+
+.modal-confirm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    p{
+        text-align: center;
+    }
+    h2{
+        text-align: center;
+    }
+}
+
+
+.ant-modal-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .ant-modal-body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        img{
+            width: 50px;
+            height: 50px;
+        }
+        h2{
+            margin: 0;
+            padding: 0;
+        }
+        p{
+            margin: 0;
+            padding: 0;
+        }
+    }
+    .ant-modal-footer{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        column-gap: 10px;
+        .cancel-btn{
+            background-color: $inactive;
+            border: none;
+            color: $white;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 5px 10px;
+        }
+        .confirm-btn{
+            background-color: $primary-color;
+            border: none;
+            color: $white;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 5px 10px;
+        }
+    }
+    
+}
+
+
+.modal-container{
+    width: 300px;
 }

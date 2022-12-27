@@ -35,4 +35,12 @@ export class OrderController {
       restaurantId
     );
   }
+
+  static async updateOrderItems(order) {
+    return Order.updateOrderItems(order);
+  }
+
+  static getDocOrderById(orderId) {
+    return Order.getDocOrderById(orderId);
+  }
 }

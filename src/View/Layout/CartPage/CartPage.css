@@ -38,6 +38,11 @@
   text-decoration: none;
 }
 
+.empty-logo {
+  margin-top: 70px;
+  width: 200px;
+}
+
 .cart-item-container {
   width: 100%;
   display: flex;
@@ -88,4 +93,73 @@
   border-radius: 12px;
   font-weight: 700;
   font-size: 16px;
+}
+
+.modal-confirm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+}
+.modal-confirm p {
+  text-align: center;
+}
+.modal-confirm h2 {
+  text-align: center;
+}
+
+.ant-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ant-modal-content .ant-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ant-modal-content .ant-modal-body img {
+  width: 50px;
+  height: 50px;
+}
+.ant-modal-content .ant-modal-body h2 {
+  margin: 0;
+  padding: 0;
+}
+.ant-modal-content .ant-modal-body p {
+  margin: 0;
+  padding: 0;
+}
+.ant-modal-content .ant-modal-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+}
+.ant-modal-content .ant-modal-footer .cancel-btn {
+  background-color: #CACACA;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 5px 10px;
+}
+.ant-modal-content .ant-modal-footer .confirm-btn {
+  background-color: #36AB27;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 5px 10px;
+}
+
+.modal-container {
+  width: 300px;
 }/*# sourceMappingURL=CartPage.css.map */

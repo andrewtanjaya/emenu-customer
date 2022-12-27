@@ -10,15 +10,19 @@ function Navbar() {
       <div className="customer-navbar-restaurant-logo">
         <img src={orderData.restaurantLogoUrl} />
       </div>
-      {orderData && orderData.foodOrderType === "DINE-IN" ? (
+      {orderData && orderData.orderType === "DINE-IN" ? (
         <div className="customer-navbar-information">
           <p>Table</p>
-          <p>Dine-in, 01</p>
+          {orderData.foodOrderType === "DINE-IN" ? (
+            <p>Dine-in, {orderData.number}</p>
+          ) : (
+            <p>Takeaway, {orderData.number}</p>
+          )}
         </div>
       ) : (
         <div className="customer-navbar-information">
           <p>Queue</p>
-          <p>Takeaway, 02</p>
+          <p>Takeaway, {orderData.number}</p>
         </div>
       )}
 

@@ -4,11 +4,20 @@ import { FoodController } from "../../../Controller/FoodController";
 import "./DetailMenuPage.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
-import { Carousel } from "antd";
+import { Carousel, Form, Input, InputNumber } from "antd";
 import { GroupController } from "../../../Controller/GroupController";
 import GroupOptionComponent from "../../Component/GroupOptionComponent/GroupOptionComponent";
+import TextArea from "antd/es/input/TextArea";
+import { CartItem } from "../../../Model/CartItem";
+import md5 from "md5";
+import { CartController } from "../../../Controller/CartController";
+import { Cart } from "../../../Model/Cart";
+import { OrderType } from "../../../Enum/OrderType";
+import DetailMenuSlider from "../../Component/DetailMenuSlider/DetailMenuSlider";
 
 function DetailMenuPage() {
+  const orderData = JSON.parse(sessionStorage.getItem("orderData"));
+  const [form] = Form.useForm();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [foodData, setFoodData] = useState({});
@@ -24,7 +33,6 @@ function DetailMenuPage() {
     setIsLoading(true);
     FoodController.getFoodById(foodId).then((food) => {
       setFoodData(food);
-      console.log(food);
     });
     GroupController.getAllGroupsByFoodId(foodId).then((groupSnap) => {
       let groupTemp = [];
@@ -32,32 +40,145 @@ function DetailMenuPage() {
         groupTemp = [...groupTemp, doc.data()];
       });
       setGroupData(groupTemp);
-      console.log(groupTemp);
       setIsLoading(false);
     });
   }, []);
 
+  function getCartIdByOrderId() {
+    let orderId = orderData.orderId.split("-");
+    return "CRT-" + orderId[1];
+  }
+
+  function handleAddToCart() {
+    form.submit();
+  }
+  const onFinish = (values) => {
+    let cartId = getCartIdByOrderId();
+    let optionIdsAndNotes = "";
+    let sumTotalAddedValue = 0;
+    let selectedGroups = [];
+
+    if (groupData) {
+      groupData.forEach((data) => {
+        if (values[data.groupId]) {
+          optionIdsAndNotes += values[data.groupId];
+
+          let addedValue = 0;
+          let optionName = "";
+          data.options.forEach((option) => {
+            if (option.optionId === values[data.groupId]) {
+              addedValue = option.optionPrice;
+              optionName = option.optionName;
+            }
+          });
+
+          let group = {
+            groupId: data.groupId,
+            optionId: values[data.groupId],
+            groupName: data.groupName,
+            optionName: optionName,
+            addedValue: Number(addedValue),
+          };
+
+          selectedGroups.push(group);
+          sumTotalAddedValue += addedValue;
+        }
+      });
+    }
+
+    if (values.notes) {
+      optionIdsAndNotes += values.notes;
+    }
+
+    let cartItemId =
+      foodData.foodId +
+      "-" +
+      md5(optionIdsAndNotes) +
+      "-" +
+      orderData.foodOrderType;
+
+    let subTotalFoodPrice = foodData.foodPrice * qty;
+    let subTotalAddedValue = sumTotalAddedValue * qty;
+
+    let cartItem = new CartItem(
+      cartItemId,
+      qty,
+      foodData.foodName,
+      foodData.foodPrice,
+      foodData.foodPictures[0],
+      orderData.foodOrderType,
+      selectedGroups,
+      values.notes ? values.notes : "",
+      subTotalFoodPrice,
+      subTotalAddedValue,
+      subTotalFoodPrice + subTotalAddedValue
+    );
+
+    CartController.getCartById(cartId).then((resp) => {
+      if (resp) {
+        //if cart exist
+        let cartItems = resp.cartItems;
+        if (isCartItemExist(cartItems, cartItemId)) {
+          //if cartItem exist
+          let index = resp.cartItems.findIndex(
+            (obj) => obj.cartItemId === cartItemId
+          );
+          resp.cartItems[index].cartItemQuantity += cartItem.cartItemQuantity;
+          resp.cartItems[index].subTotalFoodPrice =
+            resp.cartItems[index].cartItemQuantity *
+            resp.cartItems[index].cartItemPrice;
+          resp.cartItems[index].subTotalAddedValuePrice =
+            resp.cartItems[index].cartItemQuantity * sumTotalAddedValue;
+          resp.cartItems[index].subTotalPrice =
+            resp.cartItems[index].subTotalAddedValuePrice +
+            resp.cartItems[index].subTotalFoodPrice;
+          resp.totalPrice = calculateTotalPrice(cartItems);
+          CartController.updateCart(resp).then(() => {
+            navigate("/menu");
+          });
+        } else {
+          //if cartItem not exist
+          resp.cartItems.push(Object.assign({}, cartItem));
+          resp.totalPrice = calculateTotalPrice(cartItems);
+          CartController.updateCart(resp).then(() => {
+            navigate("/menu");
+          });
+        }
+      } else {
+        //if cart not exist
+        let cart = new Cart(
+          cartId,
+          orderData.restaurantId,
+          orderData.orderType,
+          orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
+          orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
+          [Object.assign({}, cartItem)],
+          subTotalFoodPrice + subTotalAddedValue
+        );
+
+        CartController.addCart(cart).then(() => {
+          navigate("/menu");
+        });
+      }
+    });
+  };
+
+  function isCartItemExist(cartItem, cartItemId) {
+    return cartItem.some((item) => item.cartItemId === cartItemId);
+  }
+
+  function calculateTotalPrice(cartItem) {
+    let totalPrice = 0;
+    cartItem.forEach((item) => {
+      totalPrice += item.subTotalPrice;
+    });
+    return totalPrice;
+  }
+
   return !isLoading || foodData ? (
     <div className="detail-menu-page-container">
       <DetailHeader />
-      <Carousel style={{ width: "100vw", maxWidth: "500px" }} dots={true}>
-        {foodData && foodData.foodPictures ? (
-          foodData.foodPictures.map((pictUrl) => (
-            <div>
-              <img
-                key={pictUrl}
-                className="detail-page-carousel-image"
-                src={pictUrl}
-                alt="Unable to load"
-              />
-            </div>
-          ))
-        ) : (
-          <div>
-            <img src="" alt="No Data" />
-          </div>
-        )}
-      </Carousel>
+      <DetailMenuSlider foodPictures={foodData.foodPictures}></DetailMenuSlider>
       <div className="detail-menu-page-content-container">
         <div className="detail-menu-page-food-title">
           <p>
@@ -78,67 +199,78 @@ function DetailMenuPage() {
             <span onClick={() => setReadMore(true)}>Read Less</span>
           </div>
         )}
-
-        <div className="detail-menu-page-group-container">
-          {groupData ? (
-            groupData.map((group) => <GroupOptionComponent group={group} />)
-          ) : (
-            <></>
-          )}
-        </div>
-
-        <div className="detail-menu-page-food-notes">
-          <p>
-            <b>Notes</b>
-          </p>
-          <textarea placeholder="Notes" name="" id="" rows="6"></textarea>
-        </div>
-
-        <div className="detail-menu-page-bottom-nav">
-          <div className="add-to-cart-quantity-container">
-            <p>
-              <b>Item Quantity</b>
-            </p>
-            <div className="input-number-stepper">
-              <div
-                className="input-number-stepper-minus"
-                onClick={() => {
-                  setQty((qty) => {
-                    if (qty > 1) {
-                      return qty - 1;
-                    }
-                    return qty;
-                  });
-                }}
-              >
-                -
-              </div>
-              <input type="number" defaultValue={1} value={qty} disabled />
-              <div className="input-number-stepper-plus" onClick={() => {
-                  setQty((qty) => {
-                      return qty + 1;
-                  });
-                }}>+</div>
-            </div>
-          </div>
-          <div
-            className={
-              foodData.foodAvailability
-                ? "add-to-cart-button active"
-                : "add-to-cart-button inactive"
-            }
-          >
-            {foodData.foodAvailability ? (
-              <p>
-                <b>Add To Cart - 20.000</b>
-              </p>
+        <Form className="form-atc" form={form} onFinish={onFinish}>
+          <div className="detail-menu-page-group-container">
+            {groupData ? (
+              groupData.map((group) => (
+                <GroupOptionComponent key={group.groupId} group={group} />
+              ))
             ) : (
-              <p>
-                <b>Food is not available</b>
-              </p>
+              <></>
             )}
           </div>
-        </div>
+
+          <div className="detail-menu-page-food-notes">
+            <p>
+              <b>Notes</b>
+            </p>
+            <Form.Item name="notes">
+              <TextArea rows={6} placeholder="Notes" />
+            </Form.Item>
+          </div>
+
+          <div className="detail-menu-page-bottom-nav">
+            <div className="add-to-cart-quantity-container">
+              <p>
+                <b>Item Quantity</b>
+              </p>
+              <div className="input-number-stepper">
+                <div
+                  className="input-number-stepper-minus"
+                  onClick={() => {
+                    setQty((qty) => {
+                      if (qty > 1) {
+                        return qty - 1;
+                      }
+                      return qty;
+                    });
+                  }}
+                >
+                  -
+                </div>
+                <p>{qty}</p>
+                <div
+                  className="input-number-stepper-plus"
+                  onClick={() => {
+                    setQty((qty) => {
+                      return qty + 1;
+                    });
+                  }}
+                >
+                  +
+                </div>
+              </div>
+            </div>
+            <div
+              onClick={() => handleAddToCart()}
+              className={
+                foodData.foodAvailability
+                  ? "add-to-cart-button active"
+                  : "add-to-cart-button inactive"
+              }
+            >
+              {foodData.foodAvailability ? (
+                <p>
+                  <b>Add To Cart - {foodData.foodPrice * qty}</b>
+                </p>
+              ) : (
+                <p>
+                  <b>Food is not available</b>
+                </p>
+              )}
+            </div>
+          </div>
+        </Form>
       </div>
     </div>
   ) : (

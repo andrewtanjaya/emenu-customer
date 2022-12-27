@@ -8,9 +8,12 @@ import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
 import { FoodController } from "../../../Controller/FoodController";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { CategoryController } from "../../../Controller/CategoryController";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { OrderController } from "../../../Controller/OrderController";
+import { PaymentStatus } from "../../../Enum/PaymentStatus";
 
 function MenuPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = searchParams.get("filter");
   const orderData = JSON.parse(sessionStorage.getItem("orderData"));
@@ -34,14 +37,21 @@ function MenuPage() {
   );
 
   useEffect(() => {
-    if (filter === "recommended") {
-      setCategoryFilter("recommended");
-      setActiveCategory("recommended");
-    } else if (filter === "best") {
-      setCategoryFilter("best");
-      setActiveCategory("best");
-    }
+    OrderController.getOrderById(orderData.orderId).then((orderResp) => {
+      if (!orderResp || orderResp.orderPaymentStatus === PaymentStatus.PAID) {
+        navigate("/invalid");
+      } else {
+        if (filter === "recommended") {
+          setCategoryFilter("recommended");
+          setActiveCategory("recommended");
+        } else if (filter === "best") {
+          setCategoryFilter("best");
+          setActiveCategory("best");
+        }
+      }
+    });
   }, []);
+
   useEffect(() => {
     setIsLoad(true);
     if (!isFoodLoad) {
