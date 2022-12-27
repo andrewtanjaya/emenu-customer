@@ -71,7 +71,7 @@ function CartPage() {
     let timestamp = Date.now();
     let orderItems = cart.cartItems.map((item) => {
       let orderItem = new OrderItem(
-        item.cartItemId,
+        item.cartItemId + "-" + timestamp,
         OrderItemStatus.PLACED,
         timestamp,
         item.cartItemQuantity,
