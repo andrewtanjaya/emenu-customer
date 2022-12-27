@@ -157,6 +157,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    p{
+        width: 30px;
+        text-align: center;
+    }
 }
 
 .input-number-stepper-minus{
@@ -200,4 +204,8 @@
 .inactive{
     background-color: $inactive;
     color: $white;
+}
+
+.form-atc{
+    width: 100%;
 }

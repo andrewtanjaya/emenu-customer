@@ -43,7 +43,7 @@ function BannerSlider(props) {
       <div>
         <Slider {...settings}>
           {props.imageUrl.map((url) => {
-            return <img key={url} src={url}></img>;
+            return <img className="banner-img" key={url} src={url}></img>;
           })}
           {props.videoUrl.map((url) => {
             return (

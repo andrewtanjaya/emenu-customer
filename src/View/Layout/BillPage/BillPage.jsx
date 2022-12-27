@@ -1,154 +1,253 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { useNavigate } from "react-router-dom";
+import { OrderController } from "../../../Controller/OrderController";
+import { RestaurantController } from "../../../Controller/RestaurantController";
+import { OrderItemStatus } from "../../../Enum/OrderItemStatus";
+import { OrderType } from "../../../Enum/OrderType";
+import { PaymentStatus } from "../../../Enum/PaymentStatus";
 import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
 import Navbar from "../../Component/Header/Header";
 import "./BillPage.css";
 function BillPage() {
+  const navigate = useNavigate();
+  const orderData = JSON.parse(sessionStorage.getItem("orderData"));
+
+  const [restaurant, setRestaurant] = useState(null);
+
+  const [takeawayItems, setTakeAwayItems] = useState(null);
+  const [dineInItems, setdineInItems] = useState(null);
+  const [order, orderLoading, orderError, orderSnapshot] = useDocumentData(
+    OrderController.getDocOrderById(orderData.orderId),
+    {
+      idField: "id",
+    }
+  );
+
+  useEffect(() => {
+    if (!orderLoading) {
+      if (order.orderPaymentStatus === PaymentStatus.PAID) {
+        navigate("/invalid");
+      }
+    }
+
+    RestaurantController.getRestaurantById(orderData.restaurantId).then(
+      (restoResp) => {
+        if (restoResp) {
+          setRestaurant(restoResp);
+        } else {
+          navigate("/invalid");
+        }
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!orderLoading) {
+      setdineInItems(getDineInItems());
+      setTakeAwayItems(getTakeawayItems());
+    }
+  }, [order]);
+
+  function getTakeawayItems() {
+    return order.orderItems.filter((item) => {
+      return item.orderItemType === OrderType.TAKEAWAY;
+    });
+  }
+  function getDineInItems() {
+    return order.orderItems.filter((item) => {
+      return item.orderItemType === OrderType.DINE_IN;
+    });
+  }
+
+  function isOrderItemsEmpty() {
+    return order.orderItems.length > 0;
+  }
+
+  function isOrderItemOptionEmpty(item) {
+    return item.orderItemOption.length > 0;
+  }
+
+  function getItemStatus(status) {
+    if (status === OrderItemStatus.PLACED) {
+      return "order-status-indicator order-placed";
+    } else if (status === OrderItemStatus.PROCESSED) {
+      return "order-status-indicator order-processed";
+    } else if (status === OrderItemStatus.DELIVERED) {
+      return "order-status-indicator order-delivered";
+    }
+  }
   return (
-    <div className="bill-page-container">
-      <Navbar />
-      <div className="bill-content">
-        <div className="restaurant-info">
-          <p>Restaurant Name</p>
-          <p>Jalan ABC no 123 Kecamatan XYZ, 11425, Jakarta Indonesia</p>
-        </div>
+    !orderLoading && (
+      <div className="bill-page-container">
+        <Navbar />
 
-        <p>
-          <b>TABLE 01, TR-01</b>
-        </p>
-
-        <hr />
-        <p>DINE IN</p>
-        <hr />
-
-        <div className="order-item-container">
-          <div className="order-item-main">
-            <p>1x Grilled Cheese Salad asdadadasdasdadasdasdsa</p>
-            <div className="order-item-container-right">
-              <span className="order-status-indicator order-placed"></span>
-              <p>IDR. 20.000</p>
-            </div>
+        <div className="bill-content">
+          <div className="restaurant-info">
+            {restaurant && (
+              <>
+                <p>{restaurant.restaurantName}</p>
+                <p>
+                  {restaurant.restaurantAddress.street},{" "}
+                  {restaurant.restaurantAddress.district},{" "}
+                  {restaurant.restaurantAddress.city},{" "}
+                  {restaurant.restaurantAddress.postalCode},{" "}
+                  {restaurant.restaurantAddress.province}{" "}
+                  {restaurant.restaurantAddress.country}
+                </p>
+              </>
+            )}
           </div>
 
-          <div className="option-group-container">
-            <p>option--1</p>
-            <div className="order-item-container-right">
-              <p>+ IDR. 20.000</p>
-            </div>
-          </div>
-
-          <div className="option-group-container">
-            <p>option--2</p>
-            <div className="order-item-container-right">
-              <p>+ IDR. 20.000</p>
-            </div>
-          </div>
-
-          <div className="option-group-container">
-            <p>option--3</p>
-            <div className="order-item-container-right">
-              <p>FREE</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="order-item-container">
-          <div className="order-item-main">
-            <p>1x Grilled Cheese Salad asdadadasdasdadasdasdsa</p>
-            <div className="order-item-container-right">
-              <span className="order-status-indicator order-processed"></span>
-              <p>IDR. 20.000</p>
-            </div>
-          </div>
-        </div>
-
-        <hr />
-        <p>TAKEAWAY</p>
-        <hr />
-
-        <div className="order-item-container">
-          <div className="order-item-main">
-            <p>1x Grilled Cheese Salad asdadadasdasdadasdasdsa</p>
-            <div className="order-item-container-right">
-              <span className="order-status-indicator order-delivered"></span>
-              <p>IDR. 20.000</p>
-            </div>
-          </div>
-
-          <div className="option-group-container">
-            <p>option--1</p>
-            <div className="order-item-container-right">
-              <p>+ IDR. 20.000</p>
-            </div>
-          </div>
-
-          <div className="option-group-container">
-            <p>option--2</p>
-            <div className="order-item-container-right">
-              <p>+ IDR. 20.000</p>
-            </div>
-          </div>
-
-          <div className="option-group-container">
-            <p>option--3</p>
-            <div className="order-item-container-right">
-              <p>FREE</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="order-item-container">
-          <div className="order-item-main">
-            <p>1x Grilled Cheese Salad asdadadasdasdadasdasdsa</p>
-            <div className="order-item-container-right">
-              <span className="order-status-indicator order-placed"></span>
-              <p>IDR. 20.000</p>
-            </div>
-          </div>
-        </div>
-
-        <hr />
-        <div className="bill-page-total-container">
-          <div className="detail-bill-container">
-            <p>Tax</p>
-            <p>IDR. 238.000</p>
-          </div>
-          <div className="detail-bill-container">
-            <p>Service Charge</p>
-            <p>IDR. 238.000</p>
-          </div>
-          <div className="detail-bill-container">
-            <p>Subtotal</p>
-            <p>IDR. 238.000</p>
-          </div>
-          <div className="total-bill-container">
-            <p>
-              <b>Total</b>
-            </p>
-            <p>
-              <b>IDR. 238.000</b>
-            </p>
-          </div>
-        </div>
-
-        <div className="bill-page-nb-container">
-          <hr />
           <p>
-            <i>NB: SILAHKAN MELAKUKAN PEMBAYARAN DI KASIR</i>
+            {orderData.orderType === OrderType.DINE_IN ? (
+              <b>
+                TABLE {orderData.number}, {orderData.orderId}
+              </b>
+            ) : (
+              <b>
+                QUEUE {orderData.number}, {orderData.orderId}
+              </b>
+            )}
           </p>
-          <hr />
-        </div>
 
-        <div className="color-info">
-          <span className="order-placed"></span>
-          <span>: Order Placed</span>
-          <span className="order-processed"></span>
-          <span>: Order Processed</span>
-          <span className="order-delivered"></span>
-          <span>: Order Delivered</span>
+          {isOrderItemsEmpty() ? (
+            <>
+              {dineInItems && dineInItems.length > 0 && (
+                <>
+                  {" "}
+                  <hr />
+                  <p>DINE IN</p>
+                  <hr />
+                  {dineInItems.map((item) => {
+                    return (
+                      <div className="order-item-container">
+                        <div className="order-item-main">
+                          <p>
+                            {item.orderItemQuantity}x {item.orderItemName}
+                          </p>
+                          <div className="order-item-container-right">
+                            <span
+                              className={getItemStatus(item.orderItemStatus)}
+                            ></span>
+                            <p>IDR. {item.subTotalFoodPrice}</p>
+                          </div>
+                        </div>
+                        {isOrderItemOptionEmpty(item) &&
+                          item.orderItemOption.map((opt) => {
+                            return (
+                              <div className="option-group-container">
+                                <p>{opt.optionName}</p>
+                                <div className="order-item-container-right">
+                                  <p>
+                                    {opt.addedValue === 0
+                                      ? "FREE"
+                                      : `+ IDR. ${
+                                          opt.addedValue *
+                                          item.orderItemQuantity
+                                        }`}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+              {takeawayItems && takeawayItems.length > 0 && (
+                <>
+                  {" "}
+                  <hr />
+                  <p>TAKEAWAY</p>
+                  <hr />
+                  {takeawayItems.map((item) => {
+                    return (
+                      <div className="order-item-container">
+                        <div className="order-item-main">
+                          <p>
+                            {item.orderItemQuantity}x {item.orderItemName}
+                          </p>
+                          <div className="order-item-container-right">
+                            <span
+                              className={getItemStatus(item.orderItemStatus)}
+                            ></span>
+                            <p>IDR. {item.subTotalFoodPrice}</p>
+                          </div>
+                        </div>
+                        {isOrderItemOptionEmpty(item) &&
+                          item.orderItemOption.map((opt) => {
+                            return (
+                              <div className="option-group-container">
+                                <p>{opt.optionName}</p>
+                                <div className="order-item-container-right">
+                                  <p>
+                                    {opt.addedValue === 0
+                                      ? "FREE"
+                                      : `+ IDR. ${
+                                          opt.addedValue *
+                                          item.orderItemQuantity
+                                        }`}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+
+              <hr />
+              <div className="bill-page-total-container">
+                <div className="detail-bill-container">
+                  <p>Tax</p>
+                  <p>IDR. {order.taxAmount}</p>
+                </div>
+                <div className="detail-bill-container">
+                  <p>Service Charge</p>
+                  <p>IDR. {order.serviceChargeAmount}</p>
+                </div>
+                <div className="detail-bill-container">
+                  <p>Subtotal</p>
+                  <p>IDR. {order.totalOrderAmount}</p>
+                </div>
+                <div className="total-bill-container">
+                  <p>
+                    <b>Total</b>
+                  </p>
+                  <p>
+                    <b>IDR. {order.finalTotalOrderAmount}</b>
+                  </p>
+                </div>
+              </div>
+              <div className="bill-page-nb-container">
+                <hr />
+                <p>
+                  <i>NB: SILAHKAN MELAKUKAN PEMBAYARAN DI KASIR</i>
+                </p>
+                <hr />
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>No Order Yet</h3>
+            </>
+          )}
+          <div className="color-info">
+            <span className="order-placed"></span>
+            <span>: Order Placed</span>
+            <span className="order-processed"></span>
+            <span>: Order Processed</span>
+            <span className="order-delivered"></span>
+            <span>: Order Delivered</span>
+          </div>
         </div>
+        <BottomNavbar />
       </div>
-      <BottomNavbar />
-    </div>
+    )
   );
 }
 

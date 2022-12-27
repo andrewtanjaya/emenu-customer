@@ -18,8 +18,12 @@ import { is } from "@babel/types";
 import MenuVerticalCard from "../../Component/MenuVerticalCard/MenuVerticalCard";
 
 import BannerSlider from "../../Component/Slider/BannerSlider";
+import { OrderController } from "../../../Controller/OrderController";
+import { PaymentStatus } from "../../../Enum/PaymentStatus";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const navigate = useNavigate();
   const [isRecommededFoodLoad, setisRecommededFoodLoad] = useState(true);
   const [isBestSellerFoodLoad, setIsBestSellerFoodLoad] = useState(true);
   const [recommendedFood, setRecommendedFood] = useState([]);
@@ -42,9 +46,14 @@ function HomePage() {
     }
   );
 
-  function sort(a, b) {
-    return a.totalSold > b.totalSold ? 1 : -1;
-  }
+  useEffect(() => {
+    OrderController.getOrderById(orderData.orderId).then((orderResp) => {
+      if (!orderResp || orderResp.orderPaymentStatus === PaymentStatus.PAID) {
+        navigate("/invalid");
+      }
+    });
+  }, []);
+
   useEffect(() => {
     setisRecommededFoodLoad(true);
     if (!isFoodLoad) {
@@ -65,14 +74,6 @@ function HomePage() {
       setRestaurantVideoUrl(restaurant.videoUrl);
     }
   }, [restaurant]);
-  const contentStyle = {
-    height: "160px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-    width: "400px",
-  };
 
   function showRecommendedFood() {
     let rows = [];

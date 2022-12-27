@@ -18,6 +18,9 @@ function WelcomePage() {
   const orderId = searchParams.get("orderId");
   const [restaurantId, setRestaurantId] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
+  const [orderTable, setOrderTable] = useState(null);
+  const [orderQueue, setOrderQueue] = useState(null);
+  const [orderType, setOrderType] = useState(null);
 
   useEffect(() => {
     if (!orderId) {
@@ -28,12 +31,14 @@ function WelcomePage() {
         RestaurantController.getRestaurantById(orderResp.restaurantId).then(
           (restoResp) => {
             if (restoResp) {
-              console.log(restoResp);
               if (orderResp.orderType !== OrderType.DINE_IN) {
                 setIsDineIn(false);
+                setOrderQueue(orderResp.orderQueue);
               } else {
                 setIsDineIn(true);
+                setOrderTable(orderResp.orderTable);
               }
+              setOrderType(orderResp.orderType);
               setRestaurantName(restoResp.restaurantName);
               setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
               setRestaurantId(orderResp.restaurantId);
@@ -54,6 +59,8 @@ function WelcomePage() {
       orderId: orderId,
       restaurantId: restaurantId,
       foodOrderType: OrderType.DINE_IN,
+      orderType: orderType,
+      number: orderTable,
       restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));
@@ -65,6 +72,8 @@ function WelcomePage() {
       orderId: orderId,
       restaurantId: restaurantId,
       foodOrderType: OrderType.TAKEAWAY,
+      orderType: orderType,
+      number: orderType === OrderType.DINE_IN ? orderTable : orderQueue,
       restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));

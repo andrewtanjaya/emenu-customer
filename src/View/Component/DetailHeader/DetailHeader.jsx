@@ -1,18 +1,22 @@
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./DetailHeader.css";
 
 function DetailHeader() {
   const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-
+  const navigate = useNavigate();
   return (
     <div className="detail-navbar-container">
-      <Link to="/menu" style={{ color: "black" }}>
-        <div className="customer-navbar-exit">
-          <LeftOutlined />
-        </div>
-      </Link>
+      <div
+        className="customer-navbar-exit"
+        style={{ color: "black" }}
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        <LeftOutlined />
+      </div>
 
       <Link
         to={"/welcome?orderId=" + orderData.orderId}
