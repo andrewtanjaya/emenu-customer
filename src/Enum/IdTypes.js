@@ -5,4 +5,5 @@ export const IdTypes = {
   GROUP: "GROUP",
   OPTION: "OPTION",
   ORDER: "ORDER",
+  ORDER_QUEUE: "ORDER_QUEUE",
 };

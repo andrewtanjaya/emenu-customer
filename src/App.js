@@ -8,6 +8,7 @@ import BillPage from "./View/Layout/BillPage/BillPage";
 import MenuPage from "./View/Layout/MenuPage/MenuPage";
 import Auth from "./Utils/Auth";
 import DetailMenuPage from "./View/Layout/DetailMenuPage/DetailMenuPage";
+import EditFood from "./View/Layout/EditFood/EditFood";
 
 function App() {
   const navigate = useNavigate();
@@ -52,6 +53,14 @@ function App() {
           element={
             <Auth>
               <BillPage />
+            </Auth>
+          }
+        />
+        <Route
+          path="/edit/:oldCartItemId"
+          element={
+            <Auth>
+              <EditFood />
             </Auth>
           }
         />

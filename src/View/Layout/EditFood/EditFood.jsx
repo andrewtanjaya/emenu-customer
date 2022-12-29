@@ -1,8 +1,13 @@
 import React, { useEffect } from "react";
 import DetailHeader from "../../Component/DetailHeader/DetailHeader";
 import { FoodController } from "../../../Controller/FoodController";
-import "./DetailMenuPage.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import "./EditFood.css";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useState } from "react";
 import { Carousel, Form, Input, InputNumber } from "antd";
 import { GroupController } from "../../../Controller/GroupController";
@@ -15,18 +20,21 @@ import { Cart } from "../../../Model/Cart";
 import { OrderType } from "../../../Enum/OrderType";
 import DetailMenuSlider from "../../Component/DetailMenuSlider/DetailMenuSlider";
 
-function DetailMenuPage() {
+function EditFood(props) {
+  const location = useLocation();
+  let { oldCartItemId } = useParams();
   const orderData = JSON.parse(sessionStorage.getItem("orderData"));
   const [form] = Form.useForm();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [foodData, setFoodData] = useState({});
   const [groupData, setGroupData] = useState([]);
-  const foodId = searchParams.get("foodId");
   const [readMore, setReadMore] = useState(true);
   const [qty, setQty] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
+    let cartItem = location.state.cartItem;
+    let cartItemIdSplitted = oldCartItemId.split("-");
+    let foodId = cartItemIdSplitted[0] + "-" + cartItemIdSplitted[1];
     if (!foodId) {
       navigate("/invalid");
     }
@@ -42,6 +50,15 @@ function DetailMenuPage() {
       setGroupData(groupTemp);
       setIsLoading(false);
     });
+
+    // CartController.getCartById;
+    if (cartItem.cartItemOption.length > 0) {
+      cartItem.cartItemOption.forEach((opt) => {
+        form.setFieldsValue({ [opt.groupId]: opt.optionId });
+      });
+    }
+    form.setFieldsValue({ notes: cartItem.cartItemNotes });
+    setQty(cartItem.cartItemQuantity);
   }, []);
 
   function getCartIdByOrderId() {
@@ -53,16 +70,15 @@ function DetailMenuPage() {
     form.submit();
   }
   const onFinish = (values) => {
-    let cartId = getCartIdByOrderId();
+    console.log(values);
+
     let optionIdsAndNotes = "";
     let sumTotalAddedValue = 0;
     let selectedGroups = [];
-
     if (groupData) {
       groupData.forEach((data) => {
         if (values[data.groupId]) {
           optionIdsAndNotes += values[data.groupId];
-
           let addedValue = 0;
           let optionName = "";
           data.options.forEach((option) => {
@@ -71,7 +87,6 @@ function DetailMenuPage() {
               optionName = option.optionName;
             }
           });
-
           let group = {
             groupId: data.groupId,
             optionId: values[data.groupId],
@@ -85,82 +100,135 @@ function DetailMenuPage() {
         }
       });
     }
-
     if (values.notes) {
       optionIdsAndNotes += values.notes;
     }
-
     let cartItemId =
       foodData.foodId +
       "-" +
       md5(optionIdsAndNotes) +
       "-" +
       orderData.foodOrderType;
-
     let subTotalFoodPrice = foodData.foodPrice * qty;
     let subTotalAddedValue = sumTotalAddedValue * qty;
 
-    let cartItem = new CartItem(
-      cartItemId,
-      qty,
-      foodData.foodName,
-      foodData.foodPrice,
-      foodData.foodPictures[0],
-      orderData.foodOrderType,
-      selectedGroups,
-      values.notes ? values.notes : "",
-      subTotalFoodPrice,
-      subTotalAddedValue,
-      subTotalFoodPrice + subTotalAddedValue
+    let cart = location.state.cartData;
+    let cartItemIndex = cart.cartItems.findIndex(
+      (obj) => obj.cartItemId === oldCartItemId
     );
+    cart.cartItems[cartItemIndex].cartItemId = cartItemId;
+    cart.cartItems[cartItemIndex].cartItemNotes = values.notes;
+    cart.cartItems[cartItemIndex].cartItemOption = selectedGroups;
+    cart.cartItems[cartItemIndex].cartItemQuantity = qty;
+    cart.cartItems[cartItemIndex].subTotalAddedValue = subTotalAddedValue;
+    cart.cartItems[cartItemIndex].subTotalFoodPrice = subTotalFoodPrice;
+    cart.cartItems[cartItemIndex].subTotalPrice =
+      subTotalFoodPrice + subTotalAddedValue;
 
-    CartController.getCartById(cartId).then((resp) => {
-      if (resp) {
-        //if cart exist
-        let cartItems = resp.cartItems;
-        if (isCartItemExist(cartItems, cartItemId)) {
-          //if cartItem exist
-          let index = resp.cartItems.findIndex(
-            (obj) => obj.cartItemId === cartItemId
-          );
-          resp.cartItems[index].cartItemQuantity += cartItem.cartItemQuantity;
-          resp.cartItems[index].subTotalFoodPrice =
-            resp.cartItems[index].cartItemQuantity *
-            resp.cartItems[index].cartItemPrice;
-          resp.cartItems[index].subTotalAddedValuePrice =
-            resp.cartItems[index].cartItemQuantity * sumTotalAddedValue;
-          resp.cartItems[index].subTotalPrice =
-            resp.cartItems[index].subTotalAddedValuePrice +
-            resp.cartItems[index].subTotalFoodPrice;
-          resp.totalPrice = calculateTotalPrice(cartItems);
-          CartController.updateCart(resp).then(() => {
-            navigate("/menu");
-          });
-        } else {
-          //if cartItem not exist
-          resp.cartItems.push(Object.assign({}, cartItem));
-          resp.totalPrice = calculateTotalPrice(cartItems);
-          CartController.updateCart(resp).then(() => {
-            navigate("/menu");
-          });
-        }
-      } else {
-        //if cart not exist
-        let cart = new Cart(
-          cartId,
-          orderData.restaurantId,
-          orderData.orderType,
-          orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
-          orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
-          [Object.assign({}, cartItem)],
-          subTotalFoodPrice + subTotalAddedValue
-        );
+    cart.totalPrice = calculateTotalPrice(cart.cartItems);
 
-        CartController.addCart(cart).then(() => {
-          navigate("/menu");
-        });
-      }
+    CartController.updateCart(cart).then(() => {
+      navigate("/cart");
     });
+
+    // let cartId = getCartIdByOrderId();
+    // let optionIdsAndNotes = "";
+    // let sumTotalAddedValue = 0;
+    // let selectedGroups = [];
+    // if (groupData) {
+    //   groupData.forEach((data) => {
+    //     if (values[data.groupId]) {
+    //       optionIdsAndNotes += values[data.groupId];
+    //       let addedValue = 0;
+    //       let optionName = "";
+    //       data.options.forEach((option) => {
+    //         if (option.optionId === values[data.groupId]) {
+    //           addedValue = option.optionPrice;
+    //           optionName = option.optionName;
+    //         }
+    //       });
+    //       let group = {
+    //         groupId: data.groupId,
+    //         optionId: values[data.groupId],
+    //         groupName: data.groupName,
+    //         optionName: optionName,
+    //         addedValue: Number(addedValue),
+    //       };
+    //       selectedGroups.push(group);
+    //       sumTotalAddedValue += addedValue;
+    //     }
+    //   });
+    // }
+    // if (values.notes) {
+    //   optionIdsAndNotes += values.notes;
+    // }
+    // let cartItemId =
+    //   foodData.foodId +
+    //   "-" +
+    //   md5(optionIdsAndNotes) +
+    //   "-" +
+    //   orderData.foodOrderType;
+    // let subTotalFoodPrice = foodData.foodPrice * qty;
+    // let subTotalAddedValue = sumTotalAddedValue * qty;
+    // let cartItem = new CartItem(
+    //   cartItemId,
+    //   qty,
+    //   foodData.foodName,
+    //   foodData.foodPrice,
+    //   foodData.foodPictures[0],
+    //   orderData.foodOrderType,
+    //   selectedGroups,
+    //   values.notes ? values.notes : "",
+    //   subTotalFoodPrice,
+    //   subTotalAddedValue,
+    //   subTotalFoodPrice + subTotalAddedValue
+    // );
+    // CartController.getCartById(cartId).then((resp) => {
+    //   if (resp) {
+    //     //if cart exist
+    //     let cartItems = resp.cartItems;
+    //     if (isCartItemExist(cartItems, cartItemId)) {
+    //       //if cartItem exist
+    //       let index = resp.cartItems.findIndex(
+    //         (obj) => obj.cartItemId === cartItemId
+    //       );
+    //       resp.cartItems[index].cartItemQuantity += cartItem.cartItemQuantity;
+    //       resp.cartItems[index].subTotalFoodPrice =
+    //         resp.cartItems[index].cartItemQuantity *
+    //         resp.cartItems[index].cartItemPrice;
+    //       resp.cartItems[index].subTotalAddedValuePrice =
+    //         resp.cartItems[index].cartItemQuantity * sumTotalAddedValue;
+    //       resp.cartItems[index].subTotalPrice =
+    //         resp.cartItems[index].subTotalAddedValuePrice +
+    //         resp.cartItems[index].subTotalFoodPrice;
+    //       resp.totalPrice = calculateTotalPrice(cartItems);
+    //       CartController.updateCart(resp).then(() => {
+    //         navigate("/menu");
+    //       });
+    //     } else {
+    //       //if cartItem not exist
+    //       resp.cartItems.push(Object.assign({}, cartItem));
+    //       resp.totalPrice = calculateTotalPrice(cartItems);
+    //       CartController.updateCart(resp).then(() => {
+    //         navigate("/menu");
+    //       });
+    //     }
+    //   } else {
+    //     //if cart not exist
+    //     let cart = new Cart(
+    //       cartId,
+    //       orderData.restaurantId,
+    //       orderData.orderType,
+    //       orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
+    //       orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
+    //       [Object.assign({}, cartItem)],
+    //       subTotalFoodPrice + subTotalAddedValue
+    //     );
+    //     CartController.addCart(cart).then(() => {
+    //       navigate("/menu");
+    //     });
+    //   }
+    // });
   };
 
   function isCartItemExist(cartItem, cartItemId) {
@@ -261,7 +329,7 @@ function DetailMenuPage() {
             >
               {foodData.foodAvailability ? (
                 <p>
-                  <b>Add To Cart - {foodData.foodPrice * qty}</b>
+                  <b>Update Cart - {foodData.foodPrice * qty}</b>
                 </p>
               ) : (
                 <p>
@@ -278,4 +346,4 @@ function DetailMenuPage() {
   );
 }
 
-export default DetailMenuPage;
+export default EditFood;
