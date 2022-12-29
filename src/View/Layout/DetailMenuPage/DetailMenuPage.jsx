@@ -81,7 +81,7 @@ function DetailMenuPage() {
           };
 
           selectedGroups.push(group);
-          sumTotalAddedValue += addedValue;
+          sumTotalAddedValue += Number(addedValue);
         }
       });
     }

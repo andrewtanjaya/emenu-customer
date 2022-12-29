@@ -4,13 +4,18 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useNavigate } from "react-router-dom";
 import { CartController } from "../../../Controller/CartController";
 import { OrderController } from "../../../Controller/OrderController";
+import { OrderQueueController } from "../../../Controller/OrderQueueController";
+import { IdTypes } from "../../../Enum/IdTypes";
 import { OrderItemStatus } from "../../../Enum/OrderItemStatus";
 import { OrderType } from "../../../Enum/OrderType";
 import { PaymentStatus } from "../../../Enum/PaymentStatus";
+import { Order } from "../../../Model/Order";
 import { OrderItem } from "../../../Model/OrderItem";
+import { OrderQueue } from "../../../Model/OrderQueue";
 import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
 import CartItemCard from "../../Component/CartItemCard/CartItemCard";
 import Navbar from "../../Component/Header/Header";
+import { generateRandomId } from "../../../Helper/Helper";
 import "./CartPage.css";
 
 function CartPage() {
@@ -68,6 +73,7 @@ function CartPage() {
     setOpen(true);
   };
   const handleOk = () => {
+    let newOrderQueueId = generateRandomId(IdTypes.ORDER_QUEUE);
     let timestamp = Date.now();
     let orderItems = cart.cartItems.map((item) => {
       let orderItem = new OrderItem(
@@ -109,9 +115,20 @@ function CartPage() {
     cart.totalPrice = 0;
 
     CartController.updateCart(cart).then(() => {
-      OrderController.updateOrderItems(order).then(() => {
-        setOpen(false);
-      });
+      OrderController.updateOrderItems(order).then(() => {});
+    });
+
+    let newOrderQueue = new OrderQueue(
+      newOrderQueueId,
+      orderData.orderId,
+      orderData.orderType,
+      orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
+      orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
+      orderData.restaurantId,
+      timestamp
+    );
+    OrderQueueController.addOrderQueue(newOrderQueue).then(() => {
+      setOpen(false);
     });
   };
 
@@ -139,14 +156,8 @@ function CartPage() {
                       {dineInItems.map((item) => {
                         return (
                           <CartItemCard
-                            key={item.cartItemKey}
-                            cartItemId={item.cartItemId}
-                            foodPicture={item.cartItemPicUrl}
-                            foodName={item.cartItemName}
-                            qty={item.cartItemQuantity}
-                            option={item.cartItemOption}
-                            notes={item.cartItemNotes}
-                            foodPrice={item.subTotalPrice}
+                            key={item.cartItemId}
+                            cartItem={item}
                             cartData={cart}
                           ></CartItemCard>
                         );
@@ -163,14 +174,8 @@ function CartPage() {
                       {takeawayItems.map((item) => {
                         return (
                           <CartItemCard
-                            key={item.cartItemKey}
-                            cartItemId={item.cartItemId}
-                            foodPicture={item.cartItemPicUrl}
-                            foodName={item.cartItemName}
-                            qty={item.cartItemQuantity}
-                            option={item.cartItemOption}
-                            notes={item.cartItemNotes}
-                            foodPrice={item.subTotalPrice}
+                            key={item.cartItemId}
+                            cartItem={item}
                             cartData={cart}
                           ></CartItemCard>
                         );

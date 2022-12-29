@@ -1,9 +1,11 @@
 import { Button } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { CartController } from "../../../Controller/CartController";
 import "./CartItemCard.css";
 
 function CartItemCard(props) {
+  const navigate = useNavigate();
   function handleDelete(cartItemId) {
     let index = props.cartData.cartItems.findIndex(
       (obj) => obj.cartItemId === cartItemId
@@ -14,15 +16,24 @@ function CartItemCard(props) {
 
     CartController.updateCart(props.cartData);
   }
+
+  function handleEdit(cartItem) {
+    navigate(`/edit/${cartItem.cartItemId}`, {
+      state: {
+        cartItem: cartItem,
+        cartData: props.cartData,
+      },
+    });
+  }
   return (
     <div className="cart-item-card-container">
-      <img src={props.foodPicture} alt="" />
+      <img src={props.cartItem.cartItemPicUrl} alt="" />
       <div className="cart-item-card-description">
         <span>
-          {props.qty} x {props.foodName}
+          {props.cartItem.cartItemQuantity} x {props.cartItem.cartItemName}
         </span>
-        {props.option &&
-          props.option.map((opt) => {
+        {props.cartItem.cartItemOption &&
+          props.cartItem.cartItemOption.map((opt) => {
             return (
               <span className="info-container" key={opt.groupId}>
                 <span className="group-option-cart-name">
@@ -33,20 +44,28 @@ function CartItemCard(props) {
             );
           })}
 
-        {props.notes && (
+        {props.cartItem.cartItemNotes && (
           <span className="info-container">
             <span className="group-option-cart-name">Notes :</span>
-            <p>{props.notes}</p>
+            <p>{props.cartItem.cartItemNotes}</p>
           </span>
         )}
         <div className="action-button-container">
-          <button>Edit</button>
-          <button onClick={() => handleDelete(props.cartItemId)}>Delete</button>
+          <button
+            onClick={() => {
+              handleEdit(props.cartItem);
+            }}
+          >
+            Edit
+          </button>
+          <button onClick={() => handleDelete(props.cartItem.cartItemId)}>
+            Delete
+          </button>
         </div>
       </div>
       <div className="cart-item-card-price">
         <p>
-          <b>{`IDR. ${props.foodPrice}`}</b>
+          <b>{`IDR. ${props.cartItem.subTotalPrice}`}</b>
         </p>
       </div>
     </div>

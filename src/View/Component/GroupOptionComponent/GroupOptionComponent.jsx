@@ -5,10 +5,6 @@ import { useState } from "react";
 import "./GroupOptionComponent.css";
 
 function GroupOptionComponent(props) {
-  //   const [tempAddedValue, settempAddedValue] = useState([]);
-  //   useEffect(() => {
-  //     console.log(tempAddedValue);
-  //   }, [tempAddedValue]);
   return (
     <div className="group-option-container">
       <div className="group-option-title">
@@ -37,7 +33,7 @@ function GroupOptionComponent(props) {
         <Radio.Group
           className="option-form"
           //  onChange={onChange}
-          //   value={value}
+          // value={choosenOpt}
         >
           {props.group.options.map((option) => (
             <div className="option-container" key={option.optionId}>
