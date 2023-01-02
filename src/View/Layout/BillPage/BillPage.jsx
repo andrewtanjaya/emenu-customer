@@ -25,12 +25,6 @@ function BillPage() {
   );
 
   useEffect(() => {
-    if (!orderLoading) {
-      if (order.orderPaymentStatus === PaymentStatus.PAID) {
-        navigate("/invalid");
-      }
-    }
-
     RestaurantController.getRestaurantById(orderData.restaurantId).then(
       (restoResp) => {
         if (restoResp) {
@@ -44,6 +38,12 @@ function BillPage() {
 
   useEffect(() => {
     if (!orderLoading) {
+      // if (!orderLoading) {
+      //   if (order.orderPaymentStatus === PaymentStatus.PAID) {
+      //     console.log(order.orderPaymentStatus);
+      //     navigate("/invalid");
+      //   }
+      // }
       setdineInItems(getDineInItems());
       setTakeAwayItems(getTakeawayItems());
     }
@@ -73,6 +73,8 @@ function BillPage() {
       return "order-status-indicator order-placed";
     } else if (status === OrderItemStatus.PROCESSED) {
       return "order-status-indicator order-processed";
+    } else if (status === OrderItemStatus.READY) {
+      return "order-status-indicator order-ready";
     } else if (status === OrderItemStatus.DELIVERED) {
       return "order-status-indicator order-delivered";
     }
@@ -241,11 +243,13 @@ function BillPage() {
             <span>: Order Placed</span>
             <span className="order-processed"></span>
             <span>: Order Processed</span>
+            <span className="order-ready"></span>
+            <span>: Order Ready</span>
             <span className="order-delivered"></span>
             <span>: Order Delivered</span>
           </div>
         </div>
-        <BottomNavbar />
+        {order.orderPaymentStatus === PaymentStatus.UNPAID && <BottomNavbar />}
       </div>
     )
   );
