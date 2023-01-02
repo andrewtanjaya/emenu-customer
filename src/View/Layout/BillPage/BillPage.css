@@ -142,6 +142,10 @@
   background-color: #F3CC43;
 }
 
+.order-ready {
+  background-color: blue;
+}
+
 .order-placed {
   background-color: #F55353;
 }/*# sourceMappingURL=BillPage.css.map */

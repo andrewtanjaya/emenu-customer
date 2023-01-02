@@ -21,36 +21,38 @@ function WelcomePage() {
   const [orderTable, setOrderTable] = useState(null);
   const [orderQueue, setOrderQueue] = useState(null);
   const [orderType, setOrderType] = useState(null);
+  const [orderPaymentStatus, setOrderPaymentStatus] = useState(null);
 
   useEffect(() => {
     if (!orderId) {
       navigate("/invalid");
     }
     OrderController.getOrderById(orderId).then((orderResp) => {
-      if (orderResp && orderResp.orderPaymentStatus === PaymentStatus.UNPAID) {
-        RestaurantController.getRestaurantById(orderResp.restaurantId).then(
-          (restoResp) => {
-            if (restoResp) {
-              if (orderResp.orderType !== OrderType.DINE_IN) {
-                setIsDineIn(false);
-                setOrderQueue(orderResp.orderQueue);
-              } else {
-                setIsDineIn(true);
-                setOrderTable(orderResp.orderTable);
-              }
-              setOrderType(orderResp.orderType);
-              setRestaurantName(restoResp.restaurantName);
-              setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
-              setRestaurantId(orderResp.restaurantId);
-              setIsLoad(false);
+      // if (orderResp && orderResp.orderPaymentStatus === PaymentStatus.UNPAID) {
+      RestaurantController.getRestaurantById(orderResp.restaurantId).then(
+        (restoResp) => {
+          if (restoResp) {
+            if (orderResp.orderType !== OrderType.DINE_IN) {
+              setIsDineIn(false);
+              setOrderQueue(orderResp.orderQueue);
             } else {
-              navigate("/invalid");
+              setIsDineIn(true);
+              setOrderTable(orderResp.orderTable);
             }
+            setOrderPaymentStatus(orderResp.orderPaymentStatus);
+            setOrderType(orderResp.orderType);
+            setRestaurantName(restoResp.restaurantName);
+            setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
+            setRestaurantId(orderResp.restaurantId);
+            setIsLoad(false);
+          } else {
+            navigate("/invalid");
           }
-        );
-      } else {
-        navigate("/invalid");
-      }
+        }
+      );
+      // } else {
+      //   navigate("/invalid");
+      // }
     });
   }, []);
 
@@ -64,7 +66,11 @@ function WelcomePage() {
       restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));
-    navigate("/home");
+    if (orderPaymentStatus === PaymentStatus.UNPAID) {
+      navigate("/home");
+    } else {
+      navigate("/view-bill");
+    }
   }
 
   function handleTakeaway() {
@@ -77,7 +83,11 @@ function WelcomePage() {
       restaurantLogoUrl: restaurantLogoUrl,
     };
     window.sessionStorage.setItem("orderData", JSON.stringify(orderData));
-    navigate("/home");
+    if (orderPaymentStatus === PaymentStatus.UNPAID) {
+      navigate("/home");
+    } else {
+      navigate("/view-bill");
+    }
   }
   return (
     <>
@@ -99,31 +109,49 @@ function WelcomePage() {
           </div>
           <div className="button-container">
             <h2>{restaurantName}</h2>
-            {isDineIn ? (
+            {orderPaymentStatus === PaymentStatus.UNPAID ? (
+              <>
+                {isDineIn ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleDineIn();
+                      }}
+                    >
+                      DINE-IN
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleTakeaway();
+                      }}
+                    >
+                      TAKEAWAY
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleTakeaway();
+                    }}
+                  >
+                    Menu
+                  </button>
+                )}
+              </>
+            ) : (
               <>
                 <button
                   onClick={() => {
-                    handleDineIn();
+                    if (isDineIn) {
+                      handleDineIn();
+                    } else {
+                      handleTakeaway();
+                    }
                   }}
                 >
-                  DINE-IN
-                </button>
-                <button
-                  onClick={() => {
-                    handleTakeaway();
-                  }}
-                >
-                  TAKEAWAY
+                  View Bill
                 </button>
               </>
-            ) : (
-              <button
-                onClick={() => {
-                  handleTakeaway();
-                }}
-              >
-                Menu
-              </button>
             )}
           </div>
         </div>
