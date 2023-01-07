@@ -2,6 +2,7 @@ import { Form, Radio } from "antd";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { rupiah } from "../../../Helper/Helper";
 import "./GroupOptionComponent.css";
 
 function GroupOptionComponent(props) {
@@ -41,7 +42,7 @@ function GroupOptionComponent(props) {
               <div className="option-container-left">
                 <p>
                   {option.optionPrice != 0
-                    ? "+ IDR. " + option.optionPrice
+                    ? rupiah(option.optionPrice)
                     : "Free"}
                 </p>
                 <Radio key={option.optionId} value={option.optionId}></Radio>

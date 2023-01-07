@@ -21,6 +21,7 @@ import BannerSlider from "../../Component/Slider/BannerSlider";
 import { OrderController } from "../../../Controller/OrderController";
 import { PaymentStatus } from "../../../Enum/PaymentStatus";
 import { useNavigate } from "react-router-dom";
+import { rupiah } from "../../../Helper/Helper";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -57,12 +58,18 @@ function HomePage() {
   useEffect(() => {
     setisRecommededFoodLoad(true);
     if (!isFoodLoad) {
-      let sortedBaseTotalSales = food.sort((a, b) => b.totalSold - a.totalSold);
+      let sortedBasedOnTotalSales = food.sort(
+        (a, b) => b.totalSold - a.totalSold
+      );
       let recommendedFilter = food.filter((data) => {
         return data.tags.includes("RECOMMENDED");
       });
       setRecommendedFood(recommendedFilter);
-      setBestSeller(sortedBaseTotalSales);
+      setBestSeller(
+        sortedBasedOnTotalSales.filter((data) => {
+          return data.totalSold > 0;
+        })
+      );
       setisRecommededFoodLoad(false);
       setIsBestSellerFoodLoad(false);
     }
@@ -84,7 +91,7 @@ function HomePage() {
           foodId={recommendedFood[i].foodId}
           foodPicture={recommendedFood[i].foodPictures[0]}
           foodName={recommendedFood[i].foodName}
-          foodPrice={`IDR. ${recommendedFood[i].foodPrice}`}
+          foodPrice={rupiah(recommendedFood[i].foodPrice)}
         ></MenuVerticalCard>
       );
     }
@@ -92,19 +99,24 @@ function HomePage() {
   }
 
   function showBestSellerFood() {
+    let length = bestSeller.length;
+    if (bestSeller.length > 5) {
+      length = 5;
+    }
     let rows = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < length; i++) {
       rows.push(
         <MenuHorizontalCard
           key={bestSeller[i].foodId}
           foodId={bestSeller[i].foodId}
           foodPicture={bestSeller[i].foodPictures[0]}
           foodName={bestSeller[i].foodName}
-          foodPrice={`IDR. ${bestSeller[i].foodPrice}`}
+          foodPrice={rupiah(bestSeller[i].foodPrice)}
           totalSold={bestSeller[i].totalSold}
         ></MenuHorizontalCard>
       );
     }
+
     return <>{rows}</>;
   }
   return (
@@ -127,14 +139,18 @@ function HomePage() {
           <div className="recommended-container">
             {!isRecommededFoodLoad && showRecommendedFood()}
           </div>
-          <div className="best-seller-title">
-            <b>Best Seller</b>
+          {bestSeller.length > 0 && (
+            <>
+              <div className="best-seller-title">
+                <b>Best Seller</b>
 
-            <a href="/menu?filter=best">See All</a>
-          </div>
-          <div className="best-seller-container">
-            {!isBestSellerFoodLoad && showBestSellerFood()}
-          </div>
+                <a href="/menu?filter=best">See All</a>
+              </div>
+              <div className="best-seller-container">
+                {!isBestSellerFoodLoad && showBestSellerFood()}
+              </div>
+            </>
+          )}
         </div>
 
         <BottomNavbar />

@@ -15,7 +15,7 @@ import { OrderQueue } from "../../../Model/OrderQueue";
 import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
 import CartItemCard from "../../Component/CartItemCard/CartItemCard";
 import Navbar from "../../Component/Header/Header";
-import { generateRandomId } from "../../../Helper/Helper";
+import { generateRandomId, rupiah } from "../../../Helper/Helper";
 import "./CartPage.css";
 
 function CartPage() {
@@ -186,7 +186,7 @@ function CartPage() {
                 <div className="checkout-container">
                   <div className="total-amount-container">
                     <b>Total</b>
-                    <b>{`IDR. ${cart.totalPrice}`}</b>
+                    <b>{rupiah(cart.totalPrice)}</b>
                   </div>
                   <div className="button-order-container">
                     <button
