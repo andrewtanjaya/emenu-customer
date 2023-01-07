@@ -2,6 +2,7 @@ import { Button } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CartController } from "../../../Controller/CartController";
+import { rupiah } from "../../../Helper/Helper";
 import "./CartItemCard.css";
 
 function CartItemCard(props) {
@@ -65,7 +66,7 @@ function CartItemCard(props) {
       </div>
       <div className="cart-item-card-price">
         <p>
-          <b>{`IDR. ${props.cartItem.subTotalPrice}`}</b>
+          <b>{rupiah(props.cartItem.subTotalPrice)}</b>
         </p>
       </div>
     </div>

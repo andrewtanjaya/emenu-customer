@@ -6,6 +6,7 @@ import { RestaurantController } from "../../../Controller/RestaurantController";
 import { OrderItemStatus } from "../../../Enum/OrderItemStatus";
 import { OrderType } from "../../../Enum/OrderType";
 import { PaymentStatus } from "../../../Enum/PaymentStatus";
+import { rupiah } from "../../../Helper/Helper";
 import BottomNavbar from "../../Component/BottomNavbar/BottomNavbar";
 import Navbar from "../../Component/Header/Header";
 import "./BillPage.css";
@@ -132,7 +133,7 @@ function BillPage() {
                             <span
                               className={getItemStatus(item.orderItemStatus)}
                             ></span>
-                            <p>IDR. {item.subTotalFoodPrice}</p>
+                            <p>{rupiah(item.subTotalFoodPrice)}</p>
                           </div>
                         </div>
                         {isOrderItemOptionEmpty(item) &&
@@ -144,10 +145,10 @@ function BillPage() {
                                   <p>
                                     {opt.addedValue === 0
                                       ? "FREE"
-                                      : `+ IDR. ${
+                                      : `+ ${rupiah(
                                           opt.addedValue *
-                                          item.orderItemQuantity
-                                        }`}
+                                            item.orderItemQuantity
+                                        )}`}
                                   </p>
                                 </div>
                               </div>
@@ -175,7 +176,7 @@ function BillPage() {
                             <span
                               className={getItemStatus(item.orderItemStatus)}
                             ></span>
-                            <p>IDR. {item.subTotalFoodPrice}</p>
+                            <p>{rupiah(item.subTotalFoodPrice)}</p>
                           </div>
                         </div>
                         {isOrderItemOptionEmpty(item) &&
@@ -187,10 +188,10 @@ function BillPage() {
                                   <p>
                                     {opt.addedValue === 0
                                       ? "FREE"
-                                      : `+ IDR. ${
+                                      : `+ ${rupiah(
                                           opt.addedValue *
-                                          item.orderItemQuantity
-                                        }`}
+                                            item.orderItemQuantity
+                                        )}`}
                                   </p>
                                 </div>
                               </div>
@@ -206,22 +207,22 @@ function BillPage() {
               <div className="bill-page-total-container">
                 <div className="detail-bill-container">
                   <p>Tax</p>
-                  <p>IDR. {order.taxAmount}</p>
+                  <p>{rupiah(order.taxAmount)}</p>
                 </div>
                 <div className="detail-bill-container">
                   <p>Service Charge</p>
-                  <p>IDR. {order.serviceChargeAmount}</p>
+                  <p>{rupiah(order.serviceChargeAmount)}</p>
                 </div>
                 <div className="detail-bill-container">
                   <p>Subtotal</p>
-                  <p>IDR. {order.totalOrderAmount}</p>
+                  <p>{rupiah(order.totalOrderAmount)}</p>
                 </div>
                 <div className="total-bill-container">
                   <p>
                     <b>Total</b>
                   </p>
                   <p>
-                    <b>IDR. {order.finalTotalOrderAmount}</b>
+                    <b>{rupiah(order.finalTotalOrderAmount)}</b>
                   </p>
                 </div>
               </div>

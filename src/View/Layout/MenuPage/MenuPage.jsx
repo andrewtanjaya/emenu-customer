@@ -11,6 +11,7 @@ import { CategoryController } from "../../../Controller/CategoryController";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { OrderController } from "../../../Controller/OrderController";
 import { PaymentStatus } from "../../../Enum/PaymentStatus";
+import { rupiah } from "../../../Helper/Helper";
 
 function MenuPage() {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ function MenuPage() {
           foodId={foodFiltered[i].foodId}
           foodPicture={foodFiltered[i].foodPictures[0]}
           foodName={foodFiltered[i].foodName}
-          foodPrice={`IDR. ${foodFiltered[i].foodPrice}`}
+          foodPrice={rupiah(foodFiltered[i].foodPrice)}
           totalSold={foodFiltered[i].totalSold}
         ></MenuHorizontalCard>
       );
