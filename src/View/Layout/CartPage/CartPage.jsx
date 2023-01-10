@@ -115,20 +115,20 @@ function CartPage() {
     cart.totalPrice = 0;
 
     CartController.updateCart(cart).then(() => {
-      OrderController.updateOrderItems(order).then(() => {});
-    });
-
-    let newOrderQueue = new OrderQueue(
-      newOrderQueueId,
-      orderData.orderId,
-      orderData.orderType,
-      orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
-      orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
-      orderData.restaurantId,
-      timestamp
-    );
-    OrderQueueController.addOrderQueue(newOrderQueue).then(() => {
-      setOpen(false);
+      OrderController.updateOrderItems(order).then(() => {
+        let newOrderQueue = new OrderQueue(
+          newOrderQueueId,
+          orderData.orderId,
+          orderData.orderType,
+          orderData.orderType === OrderType.DINE_IN ? orderData.number : null,
+          orderData.orderType === OrderType.TAKEAWAY ? orderData.number : null,
+          orderData.restaurantId,
+          timestamp
+        );
+        OrderQueueController.addOrderQueue(newOrderQueue).then(() => {
+          setOpen(false);
+        });
+      });
     });
   };
 
