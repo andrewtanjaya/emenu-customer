@@ -6,16 +6,18 @@
   align-items: center;
   width: 100%;
   max-width: 500px;
-  height: 90px;
+  height: 70px;
   box-sizing: border-box;
   background-color: #FFFFFF;
+  border-top: 1px solid #CACACA;
 }
 .bottom-navbar-container ul {
+  width: 100%;
   padding: 0;
   margin: 0;
   list-style-type: none;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .bottom-navbar-container ul li {
@@ -31,4 +33,15 @@
 .active-navbar {
   color: #36AB27;
   font-weight: 600;
+}
+
+.navbar-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-icon {
+  width: 20px;
 }/*# sourceMappingURL=BottomNavbar.css.map */
