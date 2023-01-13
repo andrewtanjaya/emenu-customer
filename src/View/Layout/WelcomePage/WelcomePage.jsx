@@ -28,31 +28,31 @@ function WelcomePage() {
       navigate("/invalid");
     }
     OrderController.getOrderById(orderId).then((orderResp) => {
-      // if (orderResp && orderResp.orderPaymentStatus === PaymentStatus.UNPAID) {
-      RestaurantController.getRestaurantById(orderResp.restaurantId).then(
-        (restoResp) => {
-          if (restoResp) {
-            if (orderResp.orderType !== OrderType.DINE_IN) {
-              setIsDineIn(false);
-              setOrderQueue(orderResp.orderQueue);
+      if (orderResp) {
+        RestaurantController.getRestaurantById(orderResp.restaurantId).then(
+          (restoResp) => {
+            if (restoResp) {
+              if (orderResp.orderType !== OrderType.DINE_IN) {
+                setIsDineIn(false);
+                setOrderQueue(orderResp.orderQueue);
+              } else {
+                setIsDineIn(true);
+                setOrderTable(orderResp.orderTable);
+              }
+              setOrderPaymentStatus(orderResp.orderPaymentStatus);
+              setOrderType(orderResp.orderType);
+              setRestaurantName(restoResp.restaurantName);
+              setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
+              setRestaurantId(orderResp.restaurantId);
+              setIsLoad(false);
             } else {
-              setIsDineIn(true);
-              setOrderTable(orderResp.orderTable);
+              navigate("/invalid");
             }
-            setOrderPaymentStatus(orderResp.orderPaymentStatus);
-            setOrderType(orderResp.orderType);
-            setRestaurantName(restoResp.restaurantName);
-            setRestaurantLogoUrl(restoResp.restaurantLogoPicture);
-            setRestaurantId(orderResp.restaurantId);
-            setIsLoad(false);
-          } else {
-            navigate("/invalid");
           }
-        }
-      );
-      // } else {
-      //   navigate("/invalid");
-      // }
+        );
+      } else {
+        navigate("/invalid");
+      }
     });
   }, []);
 
