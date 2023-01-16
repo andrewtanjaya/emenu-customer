@@ -112,7 +112,7 @@ function HomePage() {
           foodPicture={bestSeller[i].foodPictures[0]}
           foodName={bestSeller[i].foodName}
           foodPrice={rupiah(bestSeller[i].foodPrice)}
-          totalSold={bestSeller[i].totalSold}
+          totalSold={bestSeller[i].orderCount}
         ></MenuHorizontalCard>
       );
     }
