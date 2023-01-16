@@ -67,7 +67,9 @@ function MenuPage() {
               foodName.includes(keyword.toLowerCase())
             );
           } else if (categoryFilter === "best") {
-            return u.totalSold != 0 && foodName.includes(keyword.toLowerCase());
+            return (
+              u.orderCount != 0 && foodName.includes(keyword.toLowerCase())
+            );
           } else if (categoryFilter !== "") {
             return (
               u.categoryId.includes(categoryFilter) &&
@@ -92,7 +94,7 @@ function MenuPage() {
           foodPicture={foodFiltered[i].foodPictures[0]}
           foodName={foodFiltered[i].foodName}
           foodPrice={rupiah(foodFiltered[i].foodPrice)}
-          totalSold={foodFiltered[i].totalSold}
+          totalSold={foodFiltered[i].orderCount}
         ></MenuHorizontalCard>
       );
     }
