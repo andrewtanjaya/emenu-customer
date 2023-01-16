@@ -253,7 +253,7 @@ function EditFood(props) {
             <b>{foodData.foodName}</b>
           </p>
           <p>
-            <b>{foodData.totalSold} Sold</b>
+            <b>{foodData.orderCount} Sold</b>
           </p>
         </div>
         {readMore ? (
