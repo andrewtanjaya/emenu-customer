@@ -93,8 +93,8 @@ function BottomNavbar() {
                 className="navbar-icon"
                 src={
                   activeNavbar === "/view-bill"
-                    ? "https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/navbar-icon%2Ficons8-home-page-30.png?alt=media&token=9825584f-aeef-4bcc-8cfb-2b40589f0d1b"
-                    : "https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/navbar-icon%2Ficons8-home-page-30%20(1).png?alt=media&token=f90b47c2-2ae1-4637-8368-6ef636869880"
+                    ? "https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/navbar-icon%2Ficons8-menu-squared-30.png?alt=media&token=6010c69c-0623-4d62-8856-fe0a349c091f"
+                    : "https://firebasestorage.googleapis.com/v0/b/e-menu-appcation.appspot.com/o/navbar-icon%2Ficons8-paid-bill-30%20(1).png?alt=media&token=050e6bdc-83cf-4fd2-a741-dc1adc4ab7a2"
                 }
               ></img>
               <>Bill</>
